@@ -74,7 +74,30 @@
 @keyframes csSteam{0%{opacity:0;transform:translateY(0) scale(1)}40%{opacity:.35}100%{opacity:0;transform:translateY(-36px) scale(.5)}}
 @keyframes csRing{0%{opacity:.55;transform:scale(.15)}100%{opacity:0;transform:scale(2)}}
 @keyframes csPulse{0%,100%{opacity:.2}50%{opacity:.55}}
-@media(max-width:768px){.cinematic-wrap{height:350vh}.cs-headline{font-size:clamp(2.4rem,11vw,4rem)}.cs-progress-track,.cs-scroll-label,.cs-counter{display:none}}
+/* ── Cinematic: 타이머 모드 ── */
+.cinematic-wrap{height:auto!important;position:relative}
+.cinematic-sticky{position:relative!important;top:0;height:100vh}
+.cs-1 .cs-headline{white-space:normal;word-break:keep-all;max-width:860px}
+.cs-timer-bar{position:absolute;bottom:0;left:0;width:0%;height:3px;background:linear-gradient(to right,var(--gold),#B8751A);z-index:30}
+.cs-nav-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:25;background:rgba(212,146,14,.08);border:1px solid rgba(212,146,14,.22);color:rgba(212,146,14,.65);width:44px;height:44px;border-radius:50%;font-size:1.1rem;cursor:pointer;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center}
+.cs-nav-btn:hover{background:rgba(212,146,14,.2);color:var(--gold)}
+.cs-nav-prev{left:20px}
+.cs-nav-next{right:20px}
+.cs-pause-hint{position:absolute;top:22px;right:64px;z-index:25;font-size:.52rem;letter-spacing:.22em;color:rgba(212,146,14,.28);pointer-events:none}
+@media(max-width:768px){
+  .cinematic-sticky{height:100svh}
+  .cs-headline{font-size:clamp(2.2rem,10vw,3.6rem)!important;line-height:1.1}
+  .cs-1 .cs-headline{font-size:clamp(2.4rem,11vw,4rem)!important}
+  .cs-sub{font-size:.82rem;letter-spacing:.08em}
+  .cs-eyebrow{font-size:.56rem;letter-spacing:.28em}
+  .cs-content{padding:0 20px;max-width:100%}
+  .cs-progress-track,.cs-scroll-label,.cs-counter,.cs-pause-hint{display:none}
+  .cs-nav-btn{width:38px;height:38px;font-size:.9rem}
+  .cs-nav-prev{left:8px}.cs-nav-next{right:8px}
+  .cs-dots{bottom:20px}
+  .cs-timer-bar{height:2px}
+  .cs-cta-link{padding:12px 34px;font-size:.76rem}
+}
 </style>
 </head>
 <body>
@@ -148,6 +171,7 @@
       <div class="cs-content">
         <p class="cs-eyebrow">서기 1770년 · 조선 영조 《동국문헌비고》</p>
         <h2 class="cs-headline">이백 년 전,<br>이곳에 장이 섰다</h2>
+<!-- pc-two-line enforced via css -->
         <p class="cs-sub">강원도 횡성, 한양으로 향하는 길목에<br>사람과 물자가 모여들기 시작했다</p>
       </div>
     </div>
@@ -310,10 +334,14 @@
     <!-- Chrome UI -->
     <div class="cs-chrome cs-progress-track"><div class="cs-progress-fill"></div></div>
     <div class="cs-chrome cs-counter"><span class="cs-big-num">01</span><span class="cs-count-total">/ 05</span></div>
-    <div class="cs-chrome cs-scroll-label">SCROLL TO EXPLORE</div>
+    <div class="cs-chrome cs-scroll-label">AUTO PLAY</div>
     <div class="cs-chrome cs-dots">
       <div class="cs-dot on"></div><div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div>
     </div>
+    <div class="cs-timer-bar" id="csTimerBar"></div>
+    <button class="cs-nav-btn cs-nav-prev" id="csPrev">&#8249;</button>
+    <button class="cs-nav-btn cs-nav-next" id="csNext">&#8250;</button>
+    <div class="cs-pause-hint" id="csPauseHint">CLICK TO PAUSE</div>
   </div>
 </div>
 <!-- ══ /CINEMATIC ══ -->
@@ -379,7 +407,7 @@
       <div class="info-row"><div class="info-icon">📅</div><div class="info-content"><div class="info-label">장날 주기</div><div class="info-val">매월 1·6·11·16·21·26일<br>끝자리 1, 6이면 장날!</div></div></div>
       <div class="info-row"><div class="info-icon">🕐</div><div class="info-content"><div class="info-label">운영 시간</div><div class="info-val">오전 7:00 — 오후 6:00<br>상설시장은 매일 운영</div></div></div>
       <div class="info-row"><div class="info-icon">📍</div><div class="info-content"><div class="info-label">위치</div><div class="info-val">강원특별자치도 횡성군<br>횡성읍 삼일로 4-2</div></div></div>
-      <div class="info-row"><div class="info-icon">📞</div><div class="info-content"><div class="info-label">대표 전화</div><div class="info-val">033-342-2389</div></div></div>
+      <div class="info-row"><div class="info-icon">📞</div><div class="info-content"><div class="info-label">대표 전화</div><div class="info-val">010-9480-0050</div></div></div>
       <div class="info-row"><div class="info-icon">🚗</div><div class="info-content"><div class="info-label">서울에서 접근</div><div class="info-val">서울춘천고속도로 → 횡성IC<br>약 1시간 30분 소요</div></div></div>
       <div class="info-row"><div class="info-icon">🅿️</div><div class="info-content"><div class="info-label">주차 안내</div><div class="info-val">공영주차장 이용 (유료)<br>30분당 600원 (2시간까지)</div></div></div>
     </div>
@@ -430,7 +458,7 @@
     </div>
     <div class="reserve-info">
       <div class="rinfo-card"><div class="rinfo-icon">👥</div><div><div class="rinfo-label">단체 기준</div><div class="rinfo-val">10인 이상 단체 예약 가능</div></div></div>
-      <div class="rinfo-card"><div class="rinfo-icon">📞</div><div><div class="rinfo-label">문의 전화</div><div class="rinfo-val">033-342-2389</div></div></div>
+      <div class="rinfo-card"><div class="rinfo-icon">📞</div><div><div class="rinfo-label">문의 전화</div><div class="rinfo-val">010-9480-0050</div></div></div>
       <div class="rinfo-card"><div class="rinfo-icon">⏰</div><div><div class="rinfo-label">처리 시간</div><div class="rinfo-val">신청 후 1~2 영업일 내 연락</div></div></div>
       <div class="rinfo-note">※ 장날(끝자리 1·6일)에 방문하시면 활기찬 오일장 문화를 직접 체험하실 수 있습니다.<br>※ 한우 시식, 전통 음식 체험 등 별도 프로그램 문의는 전화로 연락 주세요.</div>
     </div>
@@ -451,7 +479,7 @@
     <span style="font-size:.75rem;opacity:.6">우하하 횡성한우시장 (횡성전통시장)</span>
   </div>
   <div class="contact-bar">
-    <div><div class="ct-label">대표 전화</div><div class="ct-val">033-342-2389</div></div>
+    <div><div class="ct-label">대표 전화</div><div class="ct-val">010-9480-0050</div></div>
     <div><div class="ct-label">주차 요금</div><div class="ct-val">30분 600원 (2시간 기준)</div></div>
     <div><div class="ct-label">5일장</div><div class="ct-val">매월 1·6일 끝자리</div></div>
     <div><div class="ct-label">운영 시간</div><div class="ct-val">07:00 — 18:00</div></div>
@@ -461,7 +489,7 @@
 <footer>
   <div>
     <div class="footer-brand">횡성전통시장</div>
-    <p class="footer-sub">우하하 횡성한우시장<br>강원특별자치도 횡성군 횡성읍 삼일로 4-2<br>대표전화 033-342-2389</p>
+    <p class="footer-sub">우하하 횡성한우시장<br>강원특별자치도 횡성군 횡성읍 삼일로 4-2<br>대표전화 010-9480-0050</p>
     <p class="footer-copy">© 2026 횡성전통시장 상인회. All rights reserved.</p>
   </div>
   <div class="footer-links">
@@ -494,48 +522,131 @@
 <script src="js/public.js"></script>
 <script>
 (function(){
+  /* ── Cinematic Auto-Timer (4초 간격) ── */
+  var DURATION = 4000;   // 4초 — 5초보다 리듬감 있고 지루하지 않음
+  var FADE     = 600;    // 씬 전환 페이드 ms
+
   function init(){
-    var wrap=document.getElementById('cinematic');
-    if(!wrap)return;
-    var scenes=wrap.querySelectorAll('.cs');
-    var dots=wrap.querySelectorAll('.cs-dot');
-    var fill=wrap.querySelector('.cs-progress-fill');
-    var bigNum=wrap.querySelector('.cs-big-num');
-    var n=scenes.length;
-    var prev=Array(n).fill(false);
-    function update(){
-      var top=wrap.getBoundingClientRect().top;
-      var total=wrap.offsetHeight-window.innerHeight;
-      if(total<=0)return;
-      var p=Math.max(0,Math.min(1,-top/total));
-      if(fill)fill.style.height=(p*100)+'%';
-      var step=1/n, fade=step*0.22;
+    var wrap    = document.getElementById('cinematic');
+    if(!wrap) return;
+    var sticky  = wrap.querySelector('.cinematic-sticky');
+    var scenes  = wrap.querySelectorAll('.cs');
+    var dots    = wrap.querySelectorAll('.cs-dot');
+    var fill    = wrap.querySelector('.cs-progress-fill');
+    var bigNum  = wrap.querySelector('.cs-big-num');
+    var timerBar= document.getElementById('csTimerBar');
+    var btnPrev = document.getElementById('csPrev');
+    var btnNext = document.getElementById('csNext');
+    var hint    = document.getElementById('csPauseHint');
+    var n       = scenes.length;
+    var cur     = 0;
+    var paused  = false;
+    var timer   = null;
+    var startTs = null;
+    var elapsed = 0;
+
+    /* 씬 전환 */
+    function showScene(idx, resetTimer){
+      idx = (idx + n) % n;
       for(var i=0;i<n;i++){
-        var s=i*step, e=(i+1)*step, op=0;
-        if(i===n-1){
-          if(p>=s)op=Math.min(1,(p-s)/fade);
+        var on = (i === idx);
+        scenes[i].style.transition = 'opacity '+FADE+'ms ease';
+        scenes[i].style.opacity    = on ? '1' : '0';
+        if(on){
+          scenes[i].classList.remove('active');
+          void scenes[i].offsetWidth;
+          scenes[i].classList.add('active');
+          scenes[i].style.pointerEvents='all';
         } else {
-          if(p>=s&&p<=e){
-            if(p<s+fade)op=(p-s)/fade;
-            else if(p>e-fade)op=1-(p-(e-fade))/fade;
-            else op=1;
-          }
+          scenes[i].classList.remove('active');
+          scenes[i].style.pointerEvents='none';
         }
-        scenes[i].style.opacity=op;
-        var on=op>0.42;
-        if(on&&!prev[i]){scenes[i].classList.remove('active');void scenes[i].offsetWidth;scenes[i].classList.add('active');}
-        else if(!on&&prev[i])scenes[i].classList.remove('active');
-        prev[i]=on;
-        if(dots[i])dots[i].classList.toggle('on',on);
+        if(dots[i]) dots[i].classList.toggle('on', on);
       }
-      var idx=Math.min(n-1,Math.floor(p*n+0.1));
-      if(bigNum)bigNum.textContent=String(idx+1).padStart(2,'0');
+      if(fill) fill.style.height = ((idx/(n-1))*100)+'%';
+      if(bigNum) bigNum.textContent = String(idx+1).padStart(2,'0');
+      cur = idx;
+      if(resetTimer) startAutoTimer();
     }
-    window.addEventListener('scroll',update,{passive:true});
-    window.addEventListener('resize',update,{passive:true});
-    update();
+
+    /* 타이머 바 애니메이션 */
+    function animateBar(remaining){
+      if(!timerBar) return;
+      timerBar.style.transition = 'none';
+      timerBar.style.width = ((DURATION-remaining)/DURATION*100)+'%';
+      void timerBar.offsetWidth;
+      timerBar.style.transition = 'width '+remaining+'ms linear';
+      timerBar.style.width = '100%';
+    }
+    function stopBar(){
+      if(!timerBar) return;
+      timerBar.style.transition = 'none';
+    }
+
+    /* 자동 진행 */
+    function startAutoTimer(remaining){
+      if(timer) clearTimeout(timer);
+      var rem = (remaining !== undefined) ? remaining : DURATION;
+      startTs = Date.now();
+      elapsed = DURATION - rem;
+      animateBar(rem);
+      timer = setTimeout(function(){
+        if(!paused){ showScene(cur+1, true); }
+      }, rem);
+    }
+    function pauseTimer(){
+      if(paused) return;
+      paused = true;
+      clearTimeout(timer);
+      stopBar();
+      elapsed += Date.now() - startTs;
+      if(hint) hint.textContent = 'CLICK TO RESUME';
+    }
+    function resumeTimer(){
+      if(!paused) return;
+      paused = false;
+      if(hint) hint.textContent = 'CLICK TO PAUSE';
+      var rem = Math.max(400, DURATION - elapsed);
+      startAutoTimer(rem);
+    }
+
+    /* 버튼 / 클릭 */
+    if(btnPrev) btnPrev.addEventListener('click', function(e){ e.stopPropagation(); showScene(cur-1, true); });
+    if(btnNext) btnNext.addEventListener('click', function(e){ e.stopPropagation(); showScene(cur+1, true); });
+    if(sticky)  sticky.addEventListener('click', function(){ paused ? resumeTimer() : pauseTimer(); });
+
+    /* dot 클릭 */
+    dots.forEach(function(d,i){ d.style.cursor='pointer'; d.addEventListener('click',function(e){ e.stopPropagation(); showScene(i,true); }); });
+
+    /* 터치 스와이프 (모바일) */
+    var tx=0;
+    if(sticky){
+      sticky.addEventListener('touchstart',function(e){ tx=e.touches[0].clientX; },{passive:true});
+      sticky.addEventListener('touchend',function(e){
+        var dx=e.changedTouches[0].clientX-tx;
+        if(Math.abs(dx)>50){ showScene(dx<0?cur+1:cur-1,true); }
+      },{passive:true});
+    }
+
+    /* 시작 */
+    showScene(0, false);
+    startAutoTimer();
+
+    /* 뷰포트 진입 시에만 재생 (Intersection Observer) */
+    if('IntersectionObserver' in window){
+      var io=new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(!e.isIntersecting && !paused){ pauseTimer(); }
+          else if(e.isIntersecting && paused){ resumeTimer(); }
+        });
+      },{threshold:0.3});
+      io.observe(wrap);
+    }
   }
-  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+
+  document.readyState==='loading'
+    ? document.addEventListener('DOMContentLoaded',init)
+    : init();
 })();
 </script>
 </body>
