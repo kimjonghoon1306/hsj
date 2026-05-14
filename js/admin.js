@@ -9,13 +9,29 @@ let popupImageUrl='';
 
 // ── 로그인 ────────────────────────────────────
 function doLogin(){
-  if(document.getElementById('pwInput').value===ADMIN_PW){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('adminApp').style.display='block';
-    Store.initDefaultData(); renderDashboard();
-  } else {
-    document.getElementById('loginError').style.display='block';
-  }
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+  const pw  = document.getElementById('pwInput').value;
+
+  // 로딩 상태
+  btn.classList.add('loading');
+  err.style.display = 'none';
+  err.classList.remove('shake');
+
+  setTimeout(()=>{
+    btn.classList.remove('loading');
+    if(pw === ADMIN_PW){
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('adminApp').style.display='block';
+      Store.initDefaultData(); renderDashboard();
+    } else {
+      err.style.display = 'block';
+      void err.offsetWidth; // reflow
+      err.classList.add('shake');
+      document.getElementById('pwInput').focus();
+      document.getElementById('pwInput').select();
+    }
+  }, 600);
 }
 function doLogout(){
   document.getElementById('loginScreen').style.display='flex';
