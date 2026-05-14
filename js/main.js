@@ -2,18 +2,18 @@
    횡성전통시장 - main.js
    ============================================= */
 
-// ── 설정 ──────────────────────────────────────
-const MARKET_START = { year: 2026, month: 4 }; // 5월 = index 4
-const MARKET_END   = { year: 2026, month: 11 }; // 12월 = index 11
+const MARKET_START = { year: 2026, month: 4 };  // 5월
+const MARKET_END   = { year: 2026, month: 11 }; // 12월
 const MONTH_KR = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 
-// 장날 판별 (끝자리 1 or 6)
+let currentYear  = 2026;
+let currentMonth = 4; // 기본값 5월, initCalendar에서 오늘 달로 덮어씀
+
+// ── 장날 판별 ──────────────────────────────────
 function isMarketDay(day) {
-  const last = day % 10;
-  return last === 1 || last === 6;
+  return day % 10 === 1 || day % 10 === 6;
 }
 
-// 해당 월의 장날 배열 반환
 function getMarketDays(year, month) {
   const total = new Date(year, month + 1, 0).getDate();
   const days = [];
@@ -23,7 +23,7 @@ function getMarketDays(year, month) {
   return days;
 }
 
-// 오늘 기준 다음 장날 계산
+// ── 다음 장날 계산 (오늘 포함) ─────────────────
 function calcNextMarket() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -37,15 +37,28 @@ function calcNextMarket() {
   return null;
 }
 
-// ── D-DAY 배너 ────────────────────────────────
+// ── 실시간 시계 + D-DAY ─────────────────────────
+function updateClock() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ` +
+    ['일','월','화','수','목','금','토'][now.getDay()] + '요일';
+
+  const clockEl = document.getElementById('liveClock');
+  const dateEl2 = document.getElementById('liveDate');
+  if (clockEl) clockEl.textContent = timeStr;
+  if (dateEl2) dateEl2.textContent = dateStr;
+}
+
 function initDday() {
   const mkt = calcNextMarket();
   if (!mkt) return;
 
-  const banner  = document.getElementById('ddayBanner');
-  const numEl   = document.getElementById('ddayNum');
-  const msgEl   = document.getElementById('ddayMsg');
-  const dateEl  = document.getElementById('nextDate');
+  const banner = document.getElementById('ddayBanner');
+  const numEl  = document.getElementById('ddayNum');
+  const msgEl  = document.getElementById('ddayMsg');
+  const dateEl = document.getElementById('nextDate');
 
   const m = mkt.date.getMonth() + 1;
   const d = mkt.date.getDate();
@@ -54,51 +67,38 @@ function initDday() {
     banner.classList.add('today');
     numEl.textContent  = 'D-DAY';
     msgEl.textContent  = '🎉 오늘 장날입니다! 지금 바로 횡성전통시장으로 오세요';
-    dateEl.textContent = `${m}월 ${d}일`;
   } else {
     numEl.textContent  = `D-${mkt.diff}`;
     msgEl.textContent  = `${m}월 ${d}일 장날까지 ${mkt.diff}일 남았습니다`;
-    dateEl.textContent = `${m}월 ${d}일`;
   }
+  dateEl.textContent = `${m}월 ${d}일`;
+
+  // 실시간 시계 1초마다 갱신
+  updateClock();
+  setInterval(updateClock, 1000);
 }
 
 // ── 캘린더 ────────────────────────────────────
-let currentYear  = 2026;
-let currentMonth = new Date().getMonth(); // 오늘 달로 초기화
-
-// 범위 클램핑 (5월~12월 2026)
-function clampMonth() {
-  if (currentYear === MARKET_START.year && currentMonth < MARKET_START.month) {
-    currentMonth = MARKET_START.month;
-  }
-  if (currentYear === MARKET_END.year && currentMonth > MARKET_END.month) {
-    currentMonth = MARKET_END.month;
-  }
-}
-
 function buildCalendar() {
-  clampMonth();
+  const today  = new Date();
+  const todayY = today.getFullYear();
+  const todayM = today.getMonth();
+  const todayD = today.getDate();
 
-  const today    = new Date();
-  const todayY   = today.getFullYear();
-  const todayM   = today.getMonth();
-  const todayD   = today.getDate();
-
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const total    = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDay   = new Date(currentYear, currentMonth, 1).getDay();
+  const total      = new Date(currentYear, currentMonth + 1, 0).getDate();
   const marketDays = getMarketDays(currentYear, currentMonth);
 
-  // 헤더 타이틀
   document.getElementById('calMonthTitle').textContent =
     `${currentYear}년 ${MONTH_KR[currentMonth]}`;
 
-  // 이전/다음 버튼 비활성화 처리
-  const btnPrev = document.getElementById('calPrev');
-  const btnNext = document.getElementById('calNext');
-  btnPrev.disabled = (currentYear === MARKET_START.year && currentMonth <= MARKET_START.month);
-  btnNext.disabled = (currentYear === MARKET_END.year   && currentMonth >= MARKET_END.month);
+  // 버튼 비활성화: 정확하게 경계 처리
+  const isAtStart = (currentYear === MARKET_START.year && currentMonth === MARKET_START.month);
+  const isAtEnd   = (currentYear === MARKET_END.year   && currentMonth === MARKET_END.month);
+  document.getElementById('calPrev').disabled = isAtStart;
+  document.getElementById('calNext').disabled = isAtEnd;
 
-  // 그리드 렌더
+  // 날짜 그리드
   const grid = document.getElementById('calGrid');
   grid.innerHTML = '';
 
@@ -109,23 +109,23 @@ function buildCalendar() {
   }
 
   for (let d = 1; d <= total; d++) {
-    const el  = document.createElement('div');
-    const dow = new Date(currentYear, currentMonth, d).getDay();
-    const isToday   = (d === todayD && currentMonth === todayM && currentYear === todayY);
-    const isMkt     = isMarketDay(d);
-    const isSun     = dow === 0;
+    const el     = document.createElement('div');
+    const dow    = new Date(currentYear, currentMonth, d).getDay();
+    const isMkt  = isMarketDay(d);
+    const isSun  = dow === 0;
+    const isToday = (d === todayD && currentMonth === todayM && currentYear === todayY);
 
     let cls = 'cal-day';
-    if (isMkt)  cls += ' market';
-    else if (isSun) cls += ' sunday';
-    if (isToday) cls += ' today-marker';
+    if (isMkt)       cls += ' market';
+    else if (isSun)  cls += ' sunday';
+    if (isToday)     cls += ' today-marker';
 
     el.className   = cls;
     el.textContent = d;
     grid.appendChild(el);
   }
 
-  // 장날 칩 목록 업데이트
+  // 장날 칩
   renderMarketChips(marketDays, todayY, todayM, todayD);
 }
 
@@ -146,42 +146,43 @@ function renderMarketChips(days, tY, tM, tD) {
       (isToday ? ' today' : '') +
       (isNext  ? ' next'  : '');
 
-    chip.textContent = `${MONTH_KR[currentMonth].replace('월','')}/${d}`;
+    chip.textContent = `${currentMonth + 1}/${d}`;
     container.appendChild(chip);
   });
 }
 
 function initCalendar() {
-  // 오늘이 5월 이전이면 5월부터, 이후면 해당 달부터
   const now = new Date();
-  currentYear  = 2026;
-  currentMonth = Math.max(MARKET_START.month, Math.min(now.getMonth(), MARKET_END.month));
+  const nowY = now.getFullYear();
+  const nowM = now.getMonth();
 
+  // 오늘 날짜 기준으로 시작 달 결정
+  if (nowY === 2026 && nowM >= MARKET_START.month && nowM <= MARKET_END.month) {
+    currentYear  = 2026;
+    currentMonth = nowM; // 오늘 달 그대로
+  } else {
+    currentYear  = 2026;
+    currentMonth = MARKET_START.month; // 범위 밖이면 5월로
+  }
+
+  // ◀ 이전 달
   document.getElementById('calPrev').addEventListener('click', () => {
+    if (currentYear === MARKET_START.year && currentMonth === MARKET_START.month) return;
     currentMonth--;
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     buildCalendar();
   });
 
+  // ▶ 다음 달
   document.getElementById('calNext').addEventListener('click', () => {
+    if (currentYear === MARKET_END.year && currentMonth === MARKET_END.month) return;
     currentMonth++;
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     buildCalendar();
   });
 
   buildCalendar();
-
-  // 자동 슬라이드: 5초마다 다음 달로 (범위 내 순환)
-  setInterval(() => {
-    if (currentYear === MARKET_END.year && currentMonth >= MARKET_END.month) {
-      currentMonth = MARKET_START.month;
-      currentYear  = MARKET_START.year;
-    } else {
-      currentMonth++;
-      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    }
-    buildCalendar();
-  }, 5000);
+  // ※ 자동 슬라이드 없음 — 사용자가 직접 조작
 }
 
 // ── 스크롤 Fade-in ─────────────────────────────
@@ -191,7 +192,6 @@ function initScrollObserver() {
       if (e.isIntersecting) e.target.classList.add('visible');
     });
   }, { threshold: 0.1 });
-
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 }
 
