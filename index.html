@@ -3,18 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>횡성전통시장 — 강원도 백 년 오일장</title>
+<title>횡성전통시장 — 우하하 횡성한우시장</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+.hero-sub2{font-family:'Nanum Myeongjo',serif;font-size:clamp(1.1rem,2.8vw,1.8rem);color:var(--gold);letter-spacing:.18em;font-weight:800;margin-top:-28px;margin-bottom:40px;animation:fadeUp .8s .75s ease both;display:inline-block}
+.hero-sub2::before,.hero-sub2::after{content:'—';color:rgba(212,146,14,.4);margin:0 12px;font-weight:400;letter-spacing:0}
+.cinematic-wrap{height:500vh;position:relative}
+.cinematic-sticky{position:sticky;top:0;height:100vh;overflow:hidden;background:#060402}
+.cs{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;will-change:opacity}
+.cs.active{pointer-events:all}
+.cs-1{background:#060402}
+.cs-2{background:radial-gradient(ellipse at center,#120804 0%,#060402 100%)}
+.cs-3{background:radial-gradient(ellipse at center,#1E0E06 0%,#0C0602 100%)}
+.cs-4{background:radial-gradient(ellipse at 30% 60%,#1E1208 0%,#0C0804 100%)}
+.cs-5{background:radial-gradient(ellipse at center,#D4920E 0%,#B8751A 50%,#8B5010 100%)}
+.cs-svg{position:absolute;inset:0;width:100%;height:100%}
+.cs-content{position:relative;z-index:2;text-align:center;padding:0 48px;max-width:960px}
+.cs-eyebrow{font-size:.65rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .7s .1s ease,transform .7s .1s ease}
+.cs.active .cs-eyebrow{opacity:1;transform:none}
+.cs-headline{font-family:'Nanum Myeongjo',serif;font-size:clamp(3rem,8.5vw,8rem);font-weight:800;line-height:1.06;color:var(--cream);letter-spacing:-.02em;opacity:0;transform:translateY(36px);transition:opacity 1s .35s ease,transform 1s .35s ease}
+.cs.active .cs-headline{opacity:1;transform:none}
+.cs-5 .cs-headline{color:#1E1208}
+.cs-sub{margin-top:24px;font-size:.9rem;color:rgba(247,237,216,.5);letter-spacing:.12em;line-height:2;opacity:0;transform:translateY(20px);transition:opacity .8s .65s ease,transform .8s .65s ease}
+.cs.active .cs-sub{opacity:1;transform:none}
+.cs-5 .cs-sub{color:rgba(30,18,8,.65)}
+.cs-cta-link{display:inline-block;margin-top:44px;padding:15px 52px;background:transparent;color:#1E1208;border:2px solid #1E1208;font-size:.83rem;letter-spacing:.22em;text-decoration:none;font-family:'Noto Sans KR',sans-serif;opacity:0;transform:translateY(20px);transition:opacity .7s 1.05s ease,transform .7s 1.05s ease,background .25s,color .25s}
+.cs.active .cs-cta-link{opacity:1;transform:none}
+.cs-cta-link:hover{background:#1E1208;color:var(--gold)}
+.cs-chrome{position:absolute;z-index:20;pointer-events:none}
+.cs-progress-track{right:44px;top:50%;transform:translateY(-50%);width:1px;height:120px;background:rgba(212,146,14,.18)}
+.cs-progress-fill{width:100%;height:0%;background:linear-gradient(to bottom,var(--gold),#B8751A);transition:height .06s linear}
+.cs-counter{right:28px;bottom:44px;text-align:right}
+.cs-big-num{display:block;font-family:'Nanum Myeongjo',serif;font-size:2.6rem;font-weight:800;color:var(--gold);line-height:1}
+.cs-count-total{font-size:.65rem;letter-spacing:.12em;color:rgba(212,146,14,.35)}
+.cs-scroll-label{left:44px;bottom:44px;writing-mode:vertical-lr;font-size:.6rem;letter-spacing:.35em;color:rgba(247,237,216,.2);animation:csPulse 2.5s ease-in-out infinite}
+.cs-dots{left:50%;bottom:36px;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+.cs-dot{width:6px;height:6px;border-radius:50%;background:rgba(212,146,14,.25);transition:background .4s,transform .4s}
+.cs-dot.on{background:var(--gold);transform:scale(1.4)}
+.s1-brush{stroke-dasharray:1500;stroke-dashoffset:1500}
+.cs-1.active .s1-brush{animation:csDraw 2.8s .2s cubic-bezier(.4,0,.2,1) forwards}
+.s1-brush2{stroke-dasharray:1300;stroke-dashoffset:1300}
+.cs-1.active .s1-brush2{animation:csDraw 2.2s .6s cubic-bezier(.4,0,.2,1) forwards}
+.s1-dot{opacity:0;transform:scale(0);transform-box:fill-box;transform-origin:center}
+.cs-1.active .s1-dot{animation:csDot .5s ease forwards}
+.s2-ray{stroke-dasharray:450;stroke-dashoffset:450}
+.cs-2.active .s2-ray{animation:csDraw 1s ease forwards}
+.s2-ring{stroke-dasharray:800;stroke-dashoffset:800}
+.cs-2.active .s2-ring{animation:csDraw 1.8s .5s ease forwards}
+.s2-ring2{stroke-dasharray:500;stroke-dashoffset:500}
+.cs-2.active .s2-ring2{animation:csDraw 1.3s 1.3s ease forwards}
+.s3-big{opacity:.06}
+.s3-glow{opacity:0}
+.cs-3.active .s3-glow-1{animation:csGlowPulse 2.5s .4s ease-in-out infinite alternate}
+.cs-3.active .s3-glow-2{animation:csGlowPulse 2.5s .9s ease-in-out infinite alternate}
+.s3-pip{opacity:0;transform:scale(0);transform-box:fill-box;transform-origin:center}
+.cs-3.active .s3-pip{animation:csDot .4s ease forwards}
+.s4-person{opacity:0}
+.cs-4.active .s4-person{animation:csWalkIn .9s ease forwards}
+.s4-awning{stroke-dasharray:1000;stroke-dashoffset:1000}
+.cs-4.active .s4-awning{animation:csDraw 1.4s .2s ease forwards}
+.s4-steam{opacity:0}
+.cs-4.active .s4-steam{animation:csSteam 2.4s ease-in-out infinite}
+.s5-ring{transform-origin:50% 50%;opacity:0}
+.cs-5.active .s5-ring{animation:csRing 3s ease-out infinite}
+@keyframes csDraw{to{stroke-dashoffset:0}}
+@keyframes csDot{0%{opacity:0;transform:scale(0)}65%{transform:scale(1.4)}100%{opacity:.7;transform:scale(1)}}
+@keyframes csGlowPulse{from{opacity:.1}to{opacity:.3}}
+@keyframes csWalkIn{to{opacity:1;transform:translateX(0)}}
+@keyframes csSteam{0%{opacity:0;transform:translateY(0) scale(1)}40%{opacity:.35}100%{opacity:0;transform:translateY(-36px) scale(.5)}}
+@keyframes csRing{0%{opacity:.55;transform:scale(.15)}100%{opacity:0;transform:scale(2)}}
+@keyframes csPulse{0%,100%{opacity:.2}50%{opacity:.55}}
+@media(max-width:768px){.cinematic-wrap{height:350vh}.cs-headline{font-size:clamp(2.4rem,11vw,4rem)}.cs-progress-track,.cs-scroll-label,.cs-counter{display:none}}
+</style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav>
-  <a href="#" class="nav-logo">
-    횡성전통시장
-    <span>HOENGSEONG TRADITIONAL MARKET</span>
-  </a>
+  <a href="#" class="nav-logo">횡성전통시장<span>HOENGSEONG TRADITIONAL MARKET</span></a>
   <div class="nav-links">
     <a href="#about">시장 소개</a>
     <a href="#specialties">특산물</a>
@@ -26,212 +92,300 @@
   </div>
 </nav>
 
-<!-- ── HERO ── -->
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
   <div class="hero-pattern"></div>
   <div class="hero-content">
-    <div class="hero-badge">SINCE 1924 · HOENGSEONG TRADITIONAL MARKET</div>
+    <div class="hero-badge">SINCE 1770 · HOENGSEONG TRADITIONAL MARKET</div>
     <h1 class="hero-title">횡성<br><span class="accent">전통시장</span></h1>
     <p class="hero-sub">강원도 횡성의 백 년 전통 오일장</p>
+    <p class="hero-sub2">우하하 횡성한우시장</p>
     <div class="hero-market-days">
-      <div class="dday-item">
-        <div class="label">장날</div>
-        <div class="days">매월 1·6일</div>
-      </div>
-      <div class="dday-divider" style="background:rgba(212,146,14,0.4);"></div>
-      <div class="dday-item">
-        <div class="label">운영 시간</div>
-        <div class="days" style="font-size:1.1rem;">오전 7시 — 오후 6시</div>
-      </div>
+      <div class="dday-item"><div class="label">5일장</div><div class="days">매월 1·6일</div></div>
+      <div class="dday-divider" style="background:rgba(212,146,14,.4)"></div>
+      <div class="dday-item"><div class="label">위치</div><div class="days" style="font-size:1rem">강원 횡성읍 삼일로 4-2</div></div>
     </div>
     <a href="#calendar" class="hero-cta">장날 캘린더 보기 →</a>
   </div>
-  <div class="hero-scroll">
-    <span>SCROLL</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="hero-scroll"><span>SCROLL</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- ── D-DAY BANNER ── -->
 <div id="ddayBanner" class="dday-banner">
-  <div class="dday-item">
-    <span id="ddayNum" class="dday-num">D-?</span>
-    <span class="dday-label">MARKET DAY</span>
-  </div>
+  <div class="dday-item"><span id="ddayNum" class="dday-num">D-?</span><span class="dday-label">MARKET DAY</span></div>
   <div class="dday-divider"></div>
-  <div class="dday-item">
-    <span id="nextDate" class="dday-num" style="font-size:1.6rem;">—</span>
-    <span class="dday-label">다음 장날</span>
-  </div>
+  <div class="dday-item"><span id="nextDate" class="dday-num" style="font-size:1.6rem">—</span><span class="dday-label">다음 장날</span></div>
   <div class="dday-divider"></div>
   <div id="ddayMsg" class="dday-msg">장날 정보를 불러오는 중...</div>
   <div class="dday-divider"></div>
-  <div class="dday-item">
-    <span id="liveClock" class="dday-num" style="font-size:1.6rem;font-variant-numeric:tabular-nums;letter-spacing:0.05em;">00:00:00</span>
-    <span id="liveDate" class="dday-label">날짜 로딩 중</span>
-  </div>
+  <div class="dday-item"><span id="liveClock" class="dday-num" style="font-size:1.6rem;font-variant-numeric:tabular-nums">00:00:00</span><span id="liveDate" class="dday-label">날짜 로딩 중</span></div>
 </div>
 
-<!-- ── ABOUT ── -->
+<!-- ══ CINEMATIC ══ -->
+<div class="cinematic-wrap" id="cinematic">
+  <div class="cinematic-sticky">
+
+    <!-- Scene 1 -->
+    <div class="cs cs-1" data-scene="0">
+      <svg class="cs-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <text x="800" y="520" text-anchor="middle" dominant-baseline="middle" font-family="'Nanum Myeongjo',serif" font-size="340" font-weight="800" fill="#D4920E" opacity="0.035">1770</text>
+        <path class="s1-brush" d="M 80 445 Q 280 405 480 450 Q 680 495 880 440 Q 1080 385 1280 448 Q 1420 490 1520 450" stroke="#D4920E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path class="s1-brush2" d="M 180 460 Q 400 480 620 448 Q 840 416 1060 458 Q 1280 500 1440 460" stroke="#B8751A" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/>
+        <circle class="s1-dot" cx="160"  cy="390" r="5" fill="#D4920E" style="animation-delay:1.0s"/>
+        <circle class="s1-dot" cx="340"  cy="500" r="7" fill="#B8751A" style="animation-delay:1.2s"/>
+        <circle class="s1-dot" cx="580"  cy="370" r="4" fill="#D4920E" style="animation-delay:1.4s"/>
+        <circle class="s1-dot" cx="860"  cy="510" r="6" fill="#B8751A" style="animation-delay:1.6s"/>
+        <circle class="s1-dot" cx="1080" cy="380" r="5" fill="#D4920E" style="animation-delay:1.8s"/>
+        <circle class="s1-dot" cx="1340" cy="498" r="8" fill="#B8751A" style="animation-delay:2.0s"/>
+        <line x1="50"   y1="50"  x2="180" y2="50"  stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="50"   y1="50"  x2="50"  y2="180" stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="1550" y1="50"  x2="1420" y2="50"  stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="1550" y1="50"  x2="1550" y2="180" stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="50"   y1="850" x2="180" y2="850" stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="50"   y1="850" x2="50"  y2="720" stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="1550" y1="850" x2="1420" y2="850" stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+        <line x1="1550" y1="850" x2="1550" y2="720" stroke="#D4920E" stroke-width="1" opacity="0.2"/>
+      </svg>
+      <div class="cs-content">
+        <p class="cs-eyebrow">서기 1770년 · 조선 영조 《동국문헌비고》</p>
+        <h2 class="cs-headline">이백 년 전,<br>이곳에 장이 섰다</h2>
+        <p class="cs-sub">강원도 횡성, 한양으로 향하는 길목에<br>사람과 물자가 모여들기 시작했다</p>
+      </div>
+    </div>
+
+    <!-- Scene 2 -->
+    <div class="cs cs-2" data-scene="1">
+      <svg class="cs-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <text x="800" y="520" text-anchor="middle" dominant-baseline="middle" font-family="'Nanum Myeongjo',serif" font-size="300" font-weight="800" fill="#D4920E" opacity="0.04">全國</text>
+        <g transform="translate(800,450)">
+          <line class="s2-ray" x1="0" y1="0" x2="0"    y2="-410" stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.0s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="290"  y2="-290" stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.1s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="410"  y2="0"    stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.2s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="290"  y2="290"  stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.3s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="0"    y2="410"  stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.4s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="-290" y2="290"  stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.5s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="-410" y2="0"    stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.6s"/>
+          <line class="s2-ray" x1="0" y1="0" x2="-290" y2="-290" stroke="#B8751A" stroke-width="1" opacity="0.35" style="animation-delay:.7s"/>
+        </g>
+        <circle class="s2-ring"  cx="800" cy="450" r="340" stroke="#D4920E" stroke-width="1.5" fill="none" opacity="0.45"/>
+        <circle class="s2-ring2" cx="800" cy="450" r="200" stroke="#D4920E" stroke-width="0.8" fill="none" opacity="0.3"/>
+        <line x1="40"   y1="180" x2="340"  y2="180" stroke="#D4920E" stroke-width="0.5" opacity="0.2"/>
+        <line x1="1260" y1="180" x2="1560" y2="180" stroke="#D4920E" stroke-width="0.5" opacity="0.2"/>
+        <line x1="40"   y1="720" x2="340"  y2="720" stroke="#D4920E" stroke-width="0.5" opacity="0.2"/>
+        <line x1="1260" y1="720" x2="1560" y2="720" stroke="#D4920E" stroke-width="0.5" opacity="0.2"/>
+      </svg>
+      <div class="cs-content">
+        <p class="cs-eyebrow">강원도 1위 · 전국 20위 · 1938년 조선총독부 시장통계표</p>
+        <h2 class="cs-headline">동대문 밖<br>가장 큰 시장</h2>
+        <p class="cs-sub">일제강점기에도 조선 상인들이 단합하여<br>지켜낸 횡성 장터의 자존심</p>
+      </div>
+    </div>
+
+    <!-- Scene 3 -->
+    <div class="cs cs-3" data-scene="2">
+      <svg class="cs-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <text class="s3-big" x="380"  y="750" text-anchor="middle" font-family="'Nanum Myeongjo',serif" font-size="680" font-weight="800" fill="#B8751A">1</text>
+        <text class="s3-big" x="1240" y="750" text-anchor="middle" font-family="'Nanum Myeongjo',serif" font-size="680" font-weight="800" fill="#B8751A">6</text>
+        <text class="s3-glow s3-glow-1" x="380"  y="750" text-anchor="middle" font-family="'Nanum Myeongjo',serif" font-size="680" font-weight="800" fill="#D4920E">1</text>
+        <text class="s3-glow s3-glow-2" x="1240" y="750" text-anchor="middle" font-family="'Nanum Myeongjo',serif" font-size="680" font-weight="800" fill="#D4920E">6</text>
+        <circle class="s3-pip" cx="631" cy="456" r="9" fill="#D4920E" style="animation-delay:.8s"/>
+        <circle class="s3-pip" cx="697" cy="456" r="9" fill="#D4920E" style="animation-delay:1.0s"/>
+        <circle class="s3-pip" cx="763" cy="456" r="9" fill="#D4920E" style="animation-delay:1.2s"/>
+        <circle class="s3-pip" cx="829" cy="456" r="9" fill="#D4920E" style="animation-delay:1.4s"/>
+        <circle class="s3-pip" cx="895" cy="456" r="9" fill="#D4920E" style="animation-delay:1.6s"/>
+        <circle class="s3-pip" cx="961" cy="456" r="9" fill="#D4920E" style="animation-delay:1.8s"/>
+        <text x="796" y="500" text-anchor="middle" font-family="'Noto Sans KR',sans-serif" font-size="13" fill="rgba(247,237,216,.25)" letter-spacing="3">이 달의 장날 · 6회</text>
+        <line x1="0"    y1="130" x2="540"  y2="130" stroke="#D4920E" stroke-width="0.5" opacity="0.15"/>
+        <line x1="1060" y1="130" x2="1600" y2="130" stroke="#D4920E" stroke-width="0.5" opacity="0.15"/>
+        <line x1="0"    y1="770" x2="540"  y2="770" stroke="#D4920E" stroke-width="0.5" opacity="0.15"/>
+        <line x1="1060" y1="770" x2="1600" y2="770" stroke="#D4920E" stroke-width="0.5" opacity="0.15"/>
+        <line x1="800" y1="80"  x2="800" y2="390" stroke="#D4920E" stroke-width="0.5" opacity="0.15"/>
+        <line x1="800" y1="530" x2="800" y2="820" stroke="#D4920E" stroke-width="0.5" opacity="0.15"/>
+      </svg>
+      <div class="cs-content">
+        <p class="cs-eyebrow">255년을 이어온 장날의 약속</p>
+        <h2 class="cs-headline">1과 6이면<br>장이 선다</h2>
+        <p class="cs-sub">매달 여섯 번 — 1·6·11·16·21·26일<br>이 날만큼은 횡성 전체가 깨어난다</p>
+      </div>
+    </div>
+
+    <!-- Scene 4 -->
+    <div class="cs cs-4" data-scene="3">
+      <svg class="cs-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <line x1="0" y1="710" x2="1600" y2="710" stroke="#D4920E" stroke-width="0.8" opacity="0.2"/>
+        <polyline class="s4-awning" points="0,520 160,430 320,520 480,430 640,520 800,430 960,520 1120,430 1280,520 1440,430 1600,520" stroke="#D4920E" stroke-width="2.5" fill="none" opacity="0.38"/>
+        <ellipse class="s4-steam" cx="240"  cy="400" rx="14" ry="7" fill="#F7EDD8" style="animation-delay:1.0s"/>
+        <ellipse class="s4-steam" cx="560"  cy="400" rx="11" ry="5" fill="#F7EDD8" style="animation-delay:1.5s"/>
+        <ellipse class="s4-steam" cx="880"  cy="400" rx="16" ry="8" fill="#F7EDD8" style="animation-delay:2.0s"/>
+        <ellipse class="s4-steam" cx="1200" cy="400" rx="12" ry="6" fill="#F7EDD8" style="animation-delay:2.4s"/>
+        <g class="s4-person" style="animation-delay:.20s;transform:translateX(-80px)">
+          <ellipse cx="200" cy="568" rx="24" ry="25" fill="#F7EDD8" opacity="0.55"/>
+          <rect x="176" y="594" width="48" height="90" rx="7" fill="#F7EDD8" opacity="0.50"/>
+          <rect x="166" y="610" width="22" height="64" rx="5" fill="#F7EDD8" opacity="0.42"/>
+          <rect x="186" y="684" width="14" height="32" rx="4" fill="#EFE0C0" opacity="0.50"/>
+          <rect x="212" y="684" width="14" height="34" rx="4" fill="#EFE0C0" opacity="0.50"/>
+        </g>
+        <g class="s4-person" style="animation-delay:.42s;transform:translateX(-80px)">
+          <ellipse cx="390" cy="575" rx="21" ry="22" fill="#F7EDD8" opacity="0.50"/>
+          <rect x="369" y="598" width="42" height="84" rx="6" fill="#F7EDD8" opacity="0.46"/>
+          <rect x="412" y="610" width="30" height="24" rx="4" fill="#D4920E" opacity="0.50"/>
+          <rect x="376" y="682" width="13" height="28" rx="3" fill="#EFE0C0" opacity="0.46"/>
+          <rect x="400" y="682" width="13" height="30" rx="3" fill="#EFE0C0" opacity="0.46"/>
+        </g>
+        <g class="s4-person" style="animation-delay:.64s;transform:translateX(-80px)">
+          <ellipse cx="600" cy="570" rx="23" ry="23" fill="#F7EDD8" opacity="0.52"/>
+          <rect x="577" y="594" width="46" height="86" rx="6" fill="#F7EDD8" opacity="0.48"/>
+          <rect x="622" y="602" width="24" height="60" rx="4" fill="#F7EDD8" opacity="0.42"/>
+          <rect x="585" y="680" width="14" height="30" rx="3" fill="#EFE0C0" opacity="0.48"/>
+          <rect x="610" y="678" width="14" height="32" rx="3" fill="#EFE0C0" opacity="0.48"/>
+        </g>
+        <g class="s4-person" style="animation-delay:.84s;transform:translateX(-80px)">
+          <ellipse cx="790" cy="600" rx="17" ry="18" fill="#F7EDD8" opacity="0.50"/>
+          <rect x="773" y="619" width="34" height="66" rx="5" fill="#F7EDD8" opacity="0.45"/>
+          <rect x="763" y="628" width="16" height="44" rx="4" fill="#F7EDD8" opacity="0.40"/>
+          <rect x="781" y="685" width="10" height="24" rx="3" fill="#EFE0C0" opacity="0.45"/>
+          <rect x="801" y="685" width="10" height="22" rx="3" fill="#EFE0C0" opacity="0.45"/>
+        </g>
+        <g class="s4-person" style="animation-delay:1.05s;transform:translateX(-80px)">
+          <ellipse cx="975" cy="574" rx="20" ry="21" fill="#F7EDD8" opacity="0.50"/>
+          <rect x="956" y="596" width="40" height="82" rx="6" fill="#F7EDD8" opacity="0.44" transform="rotate(4,976,637)"/>
+          <rect x="963" y="678" width="12" height="28" rx="3" fill="#EFE0C0" opacity="0.44"/>
+          <rect x="985" y="678" width="12" height="26" rx="3" fill="#EFE0C0" opacity="0.44"/>
+          <rect x="1008" y="640" width="4" height="72" rx="2" fill="#D4920E" opacity="0.35"/>
+        </g>
+        <g class="s4-person" style="animation-delay:1.25s;transform:translateX(-80px)">
+          <ellipse cx="1190" cy="578" rx="22" ry="23" fill="#F7EDD8" opacity="0.50"/>
+          <rect x="1168" y="602" width="44" height="82" rx="6" fill="#F7EDD8" opacity="0.46"/>
+          <rect x="1148" y="615" width="22" height="58" rx="4" fill="#F7EDD8" opacity="0.40"/>
+          <rect x="1178" y="684" width="13" height="28" rx="3" fill="#EFE0C0" opacity="0.46"/>
+          <rect x="1203" y="684" width="13" height="26" rx="3" fill="#EFE0C0" opacity="0.46"/>
+        </g>
+        <g class="s4-person" style="animation-delay:1.45s;transform:translateX(-80px)">
+          <ellipse cx="1400" cy="590" rx="16" ry="17" fill="#F7EDD8" opacity="0.35"/>
+          <rect x="1384" y="608" width="32" height="72" rx="5" fill="#F7EDD8" opacity="0.30"/>
+          <rect x="1390" y="680" width="10" height="22" rx="3" fill="#EFE0C0" opacity="0.30"/>
+          <rect x="1408" y="680" width="10" height="20" rx="3" fill="#EFE0C0" opacity="0.30"/>
+        </g>
+        <text x="800" y="300" text-anchor="middle" font-family="'Nanum Myeongjo',serif" font-size="180" font-weight="800" fill="#D4920E" opacity="0.025">시장</text>
+      </svg>
+      <div class="cs-content">
+        <p class="cs-eyebrow">140여 점포 · 안흥찐빵 · 더덕부침 · 취나물 · 메밀총떡</p>
+        <h2 class="cs-headline">사람 냄새,<br>정겨운 장터</h2>
+        <p class="cs-sub">부침개 굽는 소리, 뻥튀기 터지는 소리<br>이 소란이 곧 횡성전통시장입니다</p>
+      </div>
+    </div>
+
+    <!-- Scene 5 -->
+    <div class="cs cs-5" data-scene="4">
+      <svg class="cs-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <circle class="s5-ring" cx="800" cy="450" r="280" stroke="#1E1208" stroke-width="2.5" fill="none" style="animation-delay:0s"/>
+        <circle class="s5-ring" cx="800" cy="450" r="280" stroke="#1E1208" stroke-width="1.8" fill="none" style="animation-delay:.9s"/>
+        <circle class="s5-ring" cx="800" cy="450" r="280" stroke="#1E1208" stroke-width="1.2" fill="none" style="animation-delay:1.8s"/>
+        <circle class="s5-ring" cx="800" cy="450" r="280" stroke="#1E1208" stroke-width="0.7" fill="none" style="animation-delay:2.7s"/>
+        <g opacity="0.07" stroke="#1E1208" stroke-width="0.8" fill="none">
+          <path d="M 800 0 L 1600 450 L 800 900 L 0 450 Z"/>
+          <path d="M 800 120 L 1480 450 L 800 780 L 120 450 Z"/>
+          <path d="M 800 240 L 1360 450 L 800 660 L 240 450 Z"/>
+        </g>
+        <g stroke="#1E1208" stroke-width="1.2" fill="none" opacity="0.25">
+          <polyline points="50,50 170,50 170,90"/>
+          <polyline points="50,50 50,170 90,170"/>
+          <polyline points="1550,50 1430,50 1430,90"/>
+          <polyline points="1550,50 1550,170 1510,170"/>
+          <polyline points="50,850 170,850 170,810"/>
+          <polyline points="50,850 50,730 90,730"/>
+          <polyline points="1550,850 1430,850 1430,810"/>
+          <polyline points="1550,850 1550,730 1510,730"/>
+        </g>
+        <circle cx="800" cy="450" r="200" stroke="#1E1208" stroke-width="0.5" fill="none" opacity="0.15"/>
+        <circle cx="800" cy="450" r="120" stroke="#1E1208" stroke-width="0.3" fill="none" opacity="0.10"/>
+      </svg>
+      <div class="cs-content">
+        <p class="cs-eyebrow">2013년 · 문화관광형 전통시장 지정</p>
+        <h2 class="cs-headline">우하하<br>횡성전통시장</h2>
+        <p class="cs-sub">웃음이 넘치는 행복한 장터<br>강원도 횡성읍 삼일로 4-2에서 당신을 기다립니다</p>
+        <a href="#calendar" class="cs-cta-link">장날 캘린더 보기</a>
+      </div>
+    </div>
+
+    <!-- Chrome UI -->
+    <div class="cs-chrome cs-progress-track"><div class="cs-progress-fill"></div></div>
+    <div class="cs-chrome cs-counter"><span class="cs-big-num">01</span><span class="cs-count-total">/ 05</span></div>
+    <div class="cs-chrome cs-scroll-label">SCROLL TO EXPLORE</div>
+    <div class="cs-chrome cs-dots">
+      <div class="cs-dot on"></div><div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div>
+    </div>
+  </div>
+</div>
+<!-- ══ /CINEMATIC ══ -->
+
 <section class="about fade-in" id="about">
   <div class="fade-in-left">
     <div class="about-frame">
       <div class="about-frame-inner">
         <div class="about-icon">🏛️</div>
-        <div class="about-frame-text">횡성전통시장<br><span style="font-size:0.85rem;opacity:0.6;">1924년 개장</span></div>
+        <div class="about-frame-text">횡성전통시장<br><span style="font-size:.85rem;opacity:.6">우하하 횡성한우시장</span></div>
       </div>
     </div>
   </div>
   <div class="fade-in-right">
     <div class="section-tag">시장 소개</div>
     <h2 class="section-title">동대문 밖 가장 큰 장터,<br>백 년의 전통</h2>
-    <p class="section-desc">조선시대 후기 자연 발생한 횡성장은 일제강점기에 이르러 "동대문 밖 제일가는 장"이라 불릴 만큼 전국적인 명성을 얻었습니다. 수도권과 강원도를 잇는 지리적 요충지에 위치하여 지역 경제의 중심지로 자리매김하고 있습니다.</p>
+    <p class="section-desc">조선시대 후기 자연 발생한 횡성장은 일제강점기에 이르러 "동대문 밖 제일가는 장"이라 불릴 만큼 전국적인 명성을 얻었습니다. 2013년 문화관광형 전통시장 '우하하 횡성한우시장'으로 지정되어 오늘도 활기찬 5일장이 이어지고 있습니다.</p>
     <div class="about-stats">
-      <div class="stat-box fade-in-scale">
-        <span class="stat-num">140+</span>
-        <span class="stat-label">운영 점포 수</span>
-      </div>
-      <div class="stat-box fade-in-scale">
-        <span class="stat-num">100</span>
-        <span class="stat-label">년 전통</span>
-      </div>
-      <div class="stat-box fade-in-scale">
-        <span class="stat-num">5</span>
-        <span class="stat-label">일장 운영</span>
-      </div>
-      <div class="stat-box fade-in-scale">
-        <span class="stat-num">2013</span>
-        <span class="stat-label">문화관광형 지정</span>
-      </div>
+      <div class="stat-box fade-in-scale"><span class="stat-num">140+</span><span class="stat-label">운영 점포 수</span></div>
+      <div class="stat-box fade-in-scale"><span class="stat-num">255</span><span class="stat-label">년 이상 역사</span></div>
+      <div class="stat-box fade-in-scale"><span class="stat-num">6</span><span class="stat-label">회 / 매달 장날</span></div>
+      <div class="stat-box fade-in-scale"><span class="stat-num">2013</span><span class="stat-label">문화관광형 지정</span></div>
     </div>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ── SPECIALTIES ── -->
 <section class="specialties fade-in" id="specialties">
-  <div class="section-tag" style="color:var(--gold);">특산물</div>
+  <div class="section-tag" style="color:var(--gold)">특산물</div>
   <h2 class="section-title">횡성을 대표하는<br>명품 특산물</h2>
   <p class="section-desc">강원도 청정 자연에서 자란 횡성의 명품 특산물을 만나보세요. 오직 횡성 전통시장에서만 만날 수 있는 신선하고 품질 좋은 특산물이 가득합니다.</p>
   <div class="products-grid">
-    <div class="product-card">
-      <span class="product-emoji">🥩</span>
-      <div class="product-name">횡성 한우</div>
-      <p class="product-desc">청정 강원 자연환경에서 자란 국내 최고 품질의 한우. 풍부한 육즙과 높은 불포화지방산 함량으로 전국 미식가들의 사랑을 받고 있습니다.</p>
-      <span class="product-arrow">→</span>
-    </div>
-    <div class="product-card">
-      <span class="product-emoji">🌿</span>
-      <div class="product-name">횡성 더덕</div>
-      <p class="product-desc">해발 200~400m 고원에서 자란 야생 더덕. 향이 진하고 약성이 뛰어나 전통 한방에서도 귀하게 여겨온 강원도 대표 산나물입니다.</p>
-      <span class="product-arrow">→</span>
-    </div>
-    <div class="product-card">
-      <span class="product-emoji">🌽</span>
-      <div class="product-name">횡성 찰옥수수</div>
-      <p class="product-desc">맑은 물과 서늘한 기후가 만들어낸 쫄깃하고 달콤한 찰옥수수. 여름 제철에만 맛볼 수 있는 횡성의 별미입니다.</p>
-      <span class="product-arrow">→</span>
-    </div>
-    <div class="product-card">
-      <span class="product-emoji">🍄</span>
-      <div class="product-name">강원 산나물</div>
-      <p class="product-desc">취나물·곰취·참나물 등 강원도 깊은 산에서 채취한 신선한 산나물. 할머니 상인들이 직접 채취해 당일 판매합니다.</p>
-      <span class="product-arrow">→</span>
-    </div>
-    <div class="product-card">
-      <span class="product-emoji">🥛</span>
-      <div class="product-name">횡성 유제품</div>
-      <p class="product-desc">횡성 청정 목장에서 생산된 신선한 우유와 유제품. 목장 직송으로 신선도가 높고 고소한 맛이 일품입니다.</p>
-      <span class="product-arrow">→</span>
-    </div>
-    <div class="product-card">
-      <span class="product-emoji">🌾</span>
-      <div class="product-name">강원 잡곡</div>
-      <p class="product-desc">깨끗한 강원도 밭에서 재배한 흑미·수수·기장 등 다양한 잡곡류. 건강을 생각한 소비자에게 꼭 필요한 먹거리입니다.</p>
-      <span class="product-arrow">→</span>
-    </div>
+    <div class="product-card"><span class="product-emoji">🥩</span><div class="product-name">횡성 한우</div><p class="product-desc">청정 강원 자연환경에서 자란 국내 최고 품질의 한우. 풍부한 육즙과 높은 불포화지방산 함량으로 전국 미식가들의 사랑을 받고 있습니다.</p><span class="product-arrow">→</span></div>
+    <div class="product-card"><span class="product-emoji">🌿</span><div class="product-name">횡성 더덕</div><p class="product-desc">해발 200~400m 고원에서 자란 야생 더덕. 향이 진하고 약성이 뛰어나 전통 한방에서도 귀하게 여겨온 강원도 대표 산나물입니다.</p><span class="product-arrow">→</span></div>
+    <div class="product-card"><span class="product-emoji">🌽</span><div class="product-name">횡성 찰옥수수</div><p class="product-desc">맑은 물과 서늘한 기후가 만들어낸 쫄깃하고 달콤한 찰옥수수. 여름 제철에만 맛볼 수 있는 횡성의 별미입니다.</p><span class="product-arrow">→</span></div>
+    <div class="product-card"><span class="product-emoji">🍄</span><div class="product-name">강원 산나물</div><p class="product-desc">취나물·곰취·참나물 등 강원도 깊은 산에서 채취한 신선한 산나물. 할머니 상인들이 직접 채취해 당일 판매합니다.</p><span class="product-arrow">→</span></div>
+    <div class="product-card"><span class="product-emoji">🥞</span><div class="product-name">더덕부침 · 안흥찐빵</div><p class="product-desc">시장 골목 가득 퍼지는 고소한 더덕부침 향과 쫄깃한 안흥찐빵. 횡성전통시장만의 대표 먹거리입니다.</p><span class="product-arrow">→</span></div>
+    <div class="product-card"><span class="product-emoji">🌾</span><div class="product-name">강원 잡곡</div><p class="product-desc">깨끗한 강원도 밭에서 재배한 흑미·수수·기장 등 다양한 잡곡류. 건강을 생각한 소비자에게 꼭 필요한 먹거리입니다.</p><span class="product-arrow">→</span></div>
   </div>
 </section>
 
-<!-- ── CALENDAR ── -->
 <section class="calendar-section fade-in" id="calendar">
   <div class="section-tag">장날 캘린더</div>
   <h2 class="section-title">2026년 장날 일정</h2>
   <p class="section-desc">매월 1일, 6일, 11일, 16일, 21일, 26일에 5일장이 열립니다. 방문 전 꼭 장날을 확인하세요.</p>
-
   <div class="calendar-layout">
-    <!-- 캘린더 위젯 -->
     <div>
       <div class="cal-nav">
         <button id="calPrev" class="cal-nav-btn">◀</button>
         <span id="calMonthTitle" class="cal-title">2026년 5월</span>
         <button id="calNext" class="cal-nav-btn">▶</button>
       </div>
-      <div class="cal-header">
-        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
-      </div>
+      <div class="cal-header"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
       <div id="calGrid" class="cal-grid"></div>
-      <div class="cal-legend">
-        <div class="cal-legend-dot"></div>
-        <span class="cal-legend-text">장날 (1·6일 끝자리)</span>
-      </div>
-      <div class="market-day-list" style="margin-top:20px;">
+      <div class="cal-legend"><div class="cal-legend-dot"></div><span class="cal-legend-text">장날 (1·6일 끝자리)</span></div>
+      <div class="market-day-list" style="margin-top:20px">
         <div class="market-day-list-title">이 달의 장날</div>
         <div id="marketDayChips" class="market-day-chips"></div>
       </div>
     </div>
-
-    <!-- 시장 안내 정보 -->
     <div class="market-info-list">
-      <div class="info-row">
-        <div class="info-icon">📅</div>
-        <div class="info-content">
-          <div class="info-label">장날 주기</div>
-          <div class="info-val">매월 1·6·11·16·21·26일<br>끝자리 1, 6이면 장날!</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-icon">🕐</div>
-        <div class="info-content">
-          <div class="info-label">운영 시간</div>
-          <div class="info-val">오전 7:00 — 오후 6:00<br>상설시장은 매일 운영</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-icon">📍</div>
-        <div class="info-content">
-          <div class="info-label">위치</div>
-          <div class="info-val">강원특별자치도 횡성군<br>횡성읍 횡성로 19</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-icon">🚗</div>
-        <div class="info-content">
-          <div class="info-label">서울에서 접근</div>
-          <div class="info-val">서울춘천고속도로 → 횡성IC<br>약 1시간 30분 소요</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-icon">🚌</div>
-        <div class="info-content">
-          <div class="info-label">대중교통</div>
-          <div class="info-val">동서울터미널 → 횡성 버스<br>1일 다수 운행</div>
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="info-icon">🅿️</div>
-        <div class="info-content">
-          <div class="info-label">주차 안내</div>
-          <div class="info-val">시장 내 무료 주차 가능<br>장날에는 혼잡 예상</div>
-        </div>
-      </div>
+      <div class="info-row"><div class="info-icon">📅</div><div class="info-content"><div class="info-label">장날 주기</div><div class="info-val">매월 1·6·11·16·21·26일<br>끝자리 1, 6이면 장날!</div></div></div>
+      <div class="info-row"><div class="info-icon">🕐</div><div class="info-content"><div class="info-label">운영 시간</div><div class="info-val">오전 7:00 — 오후 6:00<br>상설시장은 매일 운영</div></div></div>
+      <div class="info-row"><div class="info-icon">📍</div><div class="info-content"><div class="info-label">위치</div><div class="info-val">강원특별자치도 횡성군<br>횡성읍 삼일로 4-2</div></div></div>
+      <div class="info-row"><div class="info-icon">📞</div><div class="info-content"><div class="info-label">대표 전화</div><div class="info-val">033-342-2389</div></div></div>
+      <div class="info-row"><div class="info-icon">🚗</div><div class="info-content"><div class="info-label">서울에서 접근</div><div class="info-val">서울춘천고속도로 → 횡성IC<br>약 1시간 30분 소요</div></div></div>
+      <div class="info-row"><div class="info-icon">🅿️</div><div class="info-content"><div class="info-label">주차 안내</div><div class="info-val">공영주차장 이용 (유료)<br>30분당 600원 (2시간까지)</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ── NEWS ── -->
 <section class="news-section fade-in" id="news">
   <div class="section-tag">시장 이야기</div>
   <h2 class="section-title">횡성전통시장 뉴스</h2>
@@ -242,7 +396,6 @@
 
 <div class="divider"></div>
 
-<!-- ── NOTICES ── -->
 <section class="notice-section fade-in" id="notices">
   <div class="section-tag">공지사항</div>
   <h2 class="section-title">시장 소식</h2>
@@ -250,7 +403,6 @@
   <div id="noticeList" class="notice-list"></div>
 </section>
 
-<!-- ── MERCHANTS ── -->
 <section class="merchant-section fade-in" id="merchants">
   <div class="section-tag">상인 소개</div>
   <h2 class="section-title">시장을 지키는<br>우리 상인들</h2>
@@ -260,167 +412,72 @@
 
 <div class="divider"></div>
 
-<!-- ── RESERVE ── -->
 <section class="reserve-section fade-in" id="reserve">
   <div class="section-tag">방문 예약</div>
   <h2 class="section-title">단체 방문 예약</h2>
   <p class="section-desc">단체 관람·체험 신청을 접수합니다. 담당자 확인 후 연락드리겠습니다.</p>
-
   <div class="reserve-layout">
     <div class="reserve-form">
-      <div class="rform-group">
-        <label>이름 / 단체명 *</label>
-        <input type="text" id="resName" placeholder="홍길동 / 홍길동 초등학교">
-      </div>
+      <div class="rform-group"><label>이름 / 단체명 *</label><input type="text" id="resName" placeholder="홍길동 / 홍길동 초등학교"></div>
       <div class="rform-row">
-        <div class="rform-group">
-          <label>연락처 *</label>
-          <input type="tel" id="resPhone" placeholder="010-0000-0000">
-        </div>
-        <div class="rform-group">
-          <label>방문 인원 *</label>
-          <input type="number" id="resPeople" placeholder="예) 30" min="1">
-        </div>
+        <div class="rform-group"><label>연락처 *</label><input type="tel" id="resPhone" placeholder="010-0000-0000"></div>
+        <div class="rform-group"><label>방문 인원 *</label><input type="number" id="resPeople" placeholder="예) 30" min="1"></div>
       </div>
-      <div class="rform-group">
-        <label>방문 희망일 *</label>
-        <input type="date" id="resDate">
-      </div>
-      <div class="rform-group">
-        <label>방문 목적</label>
-        <textarea id="resPurpose" placeholder="예) 학교 현장 체험학습, 단체 관광 등"></textarea>
-      </div>
+      <div class="rform-group"><label>방문 희망일 *</label><input type="date" id="resDate"></div>
+      <div class="rform-group"><label>방문 목적</label><textarea id="resPurpose" placeholder="예) 학교 현장 체험학습, 단체 관광 등"></textarea></div>
       <button class="reserve-btn" onclick="submitReservation()">예약 신청하기</button>
       <div id="reserveResult"></div>
     </div>
-
     <div class="reserve-info">
-      <div class="rinfo-card">
-        <div class="rinfo-icon">👥</div>
-        <div>
-          <div class="rinfo-label">단체 기준</div>
-          <div class="rinfo-val">10인 이상 단체 예약 가능</div>
-        </div>
-      </div>
-      <div class="rinfo-card">
-        <div class="rinfo-icon">📞</div>
-        <div>
-          <div class="rinfo-label">문의 전화</div>
-          <div class="rinfo-val">033-000-0000</div>
-        </div>
-      </div>
-      <div class="rinfo-card">
-        <div class="rinfo-icon">⏰</div>
-        <div>
-          <div class="rinfo-label">처리 시간</div>
-          <div class="rinfo-val">신청 후 1~2 영업일 내 연락</div>
-        </div>
-      </div>
-      <div class="rinfo-note">
-        ※ 장날(끝자리 1·6일)에 방문하시면 활기찬 오일장 문화를 직접 체험하실 수 있습니다.<br>
-        ※ 한우 시식, 전통 음식 체험 등 별도 프로그램 문의는 전화로 연락 주세요.
-      </div>
+      <div class="rinfo-card"><div class="rinfo-icon">👥</div><div><div class="rinfo-label">단체 기준</div><div class="rinfo-val">10인 이상 단체 예약 가능</div></div></div>
+      <div class="rinfo-card"><div class="rinfo-icon">📞</div><div><div class="rinfo-label">문의 전화</div><div class="rinfo-val">033-342-2389</div></div></div>
+      <div class="rinfo-card"><div class="rinfo-icon">⏰</div><div><div class="rinfo-label">처리 시간</div><div class="rinfo-val">신청 후 1~2 영업일 내 연락</div></div></div>
+      <div class="rinfo-note">※ 장날(끝자리 1·6일)에 방문하시면 활기찬 오일장 문화를 직접 체험하실 수 있습니다.<br>※ 한우 시식, 전통 음식 체험 등 별도 프로그램 문의는 전화로 연락 주세요.</div>
     </div>
   </div>
 </section>
 
-<!-- ── ACCESS ── -->
 <section class="access fade-in" id="access">
   <div class="section-tag">오시는 길</div>
   <h2 class="section-title">횡성전통시장<br>찾아오기</h2>
-
   <div class="access-grid">
-    <div class="access-card">
-      <h3>🚗 자가용</h3>
-      <p>
-        서울 → 서울춘천고속도로<br>
-        → 횡성IC → 시내 방면 5분<br>
-        강릉 → 영동고속도로<br>
-        → 횡성IC → 시내 방면 5분<br>
-        <br>
-        <strong>소요 시간:</strong> 서울 약 1시간 30분
-      </p>
-    </div>
-    <div class="access-card">
-      <h3>🚌 버스</h3>
-      <p>
-        동서울터미널 → 횡성<br>
-        1일 10여 회 운행<br>
-        약 1시간 40분 소요<br>
-        <br>
-        강남고속버스터미널<br>
-        → 원주 → 횡성 환승<br>
-        <br>
-        <strong>하차:</strong> 횡성시외버스터미널
-      </p>
-    </div>
-    <div class="access-card">
-      <h3>🚆 기차 + 버스</h3>
-      <p>
-        청량리 → KTX → 만종역<br>
-        약 40분 소요<br>
-        <br>
-        만종역에서 횡성 버스 환승<br>
-        약 20분 소요<br>
-        <br>
-        <strong>총 소요:</strong> 약 1시간
-      </p>
-    </div>
+    <div class="access-card"><h3>🚗 자가용</h3><p>서울 → 서울춘천고속도로<br>→ 횡성IC → 시내 방면 5분<br><br><strong>소요 시간:</strong> 서울 약 1시간 30분</p></div>
+    <div class="access-card"><h3>🚌 버스</h3><p>동서울터미널 → 횡성 1일 10여 회<br>약 1시간 40분 소요<br><br>삼일광장(81-033) 하차<br>만세공원(81-026) 하차</p></div>
+    <div class="access-card"><h3>🚆 기차 + 버스</h3><p>청량리 → KTX → 만종역 약 40분<br>만종역에서 횡성 버스 환승 약 20분<br><br><strong>총 소요:</strong> 약 1시간</p></div>
   </div>
-
   <div class="access-map">
-    <span style="font-size:2rem;">📍</span>
-    <span>강원특별자치도 횡성군 횡성읍 횡성로 19</span>
-    <span style="font-size:0.75rem;opacity:0.6;">지도 서비스 준비 중</span>
+    <span style="font-size:2rem">📍</span>
+    <span>강원특별자치도 횡성군 횡성읍 삼일로 4-2</span>
+    <span style="font-size:.75rem;opacity:.6">우하하 횡성한우시장 (횡성전통시장)</span>
   </div>
-
   <div class="contact-bar">
-    <div>
-      <div class="ct-label">대표 전화</div>
-      <div class="ct-val">033-000-0000</div>
-    </div>
-    <div>
-      <div class="ct-label">팩스</div>
-      <div class="ct-val">033-000-0001</div>
-    </div>
-    <div>
-      <div class="ct-label">이메일</div>
-      <div class="ct-val">info@hsj-market.kr</div>
-    </div>
-    <div>
-      <div class="ct-label">운영 시간</div>
-      <div class="ct-val">월–토 09:00–18:00</div>
-    </div>
+    <div><div class="ct-label">대표 전화</div><div class="ct-val">033-342-2389</div></div>
+    <div><div class="ct-label">주차 요금</div><div class="ct-val">30분 600원 (2시간 기준)</div></div>
+    <div><div class="ct-label">5일장</div><div class="ct-val">매월 1·6일 끝자리</div></div>
+    <div><div class="ct-label">운영 시간</div><div class="ct-val">07:00 — 18:00</div></div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
 <footer>
   <div>
     <div class="footer-brand">횡성전통시장</div>
-    <p class="footer-sub">강원특별자치도 횡성군 횡성읍 횡성로 19<br>대표전화 033-000-0000 · 팩스 033-000-0001<br>사업자등록번호 000-00-00000</p>
+    <p class="footer-sub">우하하 횡성한우시장<br>강원특별자치도 횡성군 횡성읍 삼일로 4-2<br>대표전화 033-342-2389</p>
     <p class="footer-copy">© 2026 횡성전통시장 상인회. All rights reserved.</p>
   </div>
   <div class="footer-links">
-    <a href="#about">시장 소개</a>
-    <a href="#specialties">특산물</a>
-    <a href="#calendar">장날 캘린더</a>
-    <a href="#news">뉴스</a>
-    <a href="#notices">공지사항</a>
-    <a href="#merchants">상인 소개</a>
-    <a href="#reserve">방문 예약</a>
-    <a href="admin.html">관리자</a>
+    <a href="#about">시장 소개</a><a href="#specialties">특산물</a><a href="#calendar">장날 캘린더</a>
+    <a href="#news">뉴스</a><a href="#notices">공지사항</a><a href="#merchants">상인 소개</a>
+    <a href="#reserve">방문 예약</a><a href="admin.html">관리자</a>
   </div>
 </footer>
 
-<!-- ── 팝업 오버레이 ── -->
 <div id="sitePopupOverlay">
   <div id="sitePopupBox">
     <button class="popup-close-x" onclick="closePopup()">×</button>
     <div id="sitePopupImg"></div>
-    <div style="padding:24px 28px 12px;">
-      <div style="font-family:'Nanum Myeongjo',serif;font-size:1.3rem;font-weight:800;color:var(--brown);margin-bottom:10px;" id="sitePopupTitle"></div>
-      <div style="font-size:0.88rem;color:rgba(30,18,8,0.7);line-height:1.8;" id="sitePopupContent"></div>
+    <div style="padding:24px 28px 12px">
+      <div style="font-family:'Nanum Myeongjo',serif;font-size:1.3rem;font-weight:800;color:var(--brown);margin-bottom:10px" id="sitePopupTitle"></div>
+      <div style="font-size:.88rem;color:rgba(30,18,8,.7);line-height:1.8" id="sitePopupContent"></div>
     </div>
     <div class="popup-btn-row">
       <button class="popup-btn" onclick="closePopupWeek()">일주일간 안보기</button>
@@ -429,12 +486,57 @@
   </div>
 </div>
 
-<!-- ── 관리자 버튼 ── -->
 <a href="admin.html" class="admin-gear" title="관리자 페이지">⚙️</a>
 
 <script src="js/store.js"></script>
 <script src="js/main.js"></script>
 <script src="js/news.js"></script>
 <script src="js/public.js"></script>
+<script>
+(function(){
+  function init(){
+    var wrap=document.getElementById('cinematic');
+    if(!wrap)return;
+    var scenes=wrap.querySelectorAll('.cs');
+    var dots=wrap.querySelectorAll('.cs-dot');
+    var fill=wrap.querySelector('.cs-progress-fill');
+    var bigNum=wrap.querySelector('.cs-big-num');
+    var n=scenes.length;
+    var prev=Array(n).fill(false);
+    function update(){
+      var top=wrap.getBoundingClientRect().top;
+      var total=wrap.offsetHeight-window.innerHeight;
+      if(total<=0)return;
+      var p=Math.max(0,Math.min(1,-top/total));
+      if(fill)fill.style.height=(p*100)+'%';
+      var step=1/n, fade=step*0.22;
+      for(var i=0;i<n;i++){
+        var s=i*step, e=(i+1)*step, op=0;
+        if(i===n-1){
+          if(p>=s)op=Math.min(1,(p-s)/fade);
+        } else {
+          if(p>=s&&p<=e){
+            if(p<s+fade)op=(p-s)/fade;
+            else if(p>e-fade)op=1-(p-(e-fade))/fade;
+            else op=1;
+          }
+        }
+        scenes[i].style.opacity=op;
+        var on=op>0.42;
+        if(on&&!prev[i]){scenes[i].classList.remove('active');void scenes[i].offsetWidth;scenes[i].classList.add('active');}
+        else if(!on&&prev[i])scenes[i].classList.remove('active');
+        prev[i]=on;
+        if(dots[i])dots[i].classList.toggle('on',on);
+      }
+      var idx=Math.min(n-1,Math.floor(p*n+0.1));
+      if(bigNum)bigNum.textContent=String(idx+1).padStart(2,'0');
+    }
+    window.addEventListener('scroll',update,{passive:true});
+    window.addEventListener('resize',update,{passive:true});
+    update();
+  }
+  document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+})();
+</script>
 </body>
 </html>
