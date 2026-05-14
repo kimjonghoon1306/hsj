@@ -19,45 +19,177 @@ body{
   color:var(--ink);line-height:1.75;-webkit-text-size-adjust:100%;
 }
 
-/* ══ 로그인 ══ */
+/* ══ 로그인 화면 ══ */
 #loginScreen{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(160deg,#1E1208 0%,#3D2314 100%);padding:20px;
+  background:#050302;padding:20px;position:relative;overflow:hidden;
 }
+/* 다층 배경 글로우 */
+.login-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 55% at 25% 38%, rgba(184,117,26,.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 78% 65%, rgba(212,146,14,.13) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 80% at 50% 50%, #100804 0%, #050302 100%);
+  animation:lBgPulse 9s ease-in-out infinite alternate;
+}
+@keyframes lBgPulse{from{opacity:.8}to{opacity:1}}
+/* 중앙 글로우 (박스 뒤) */
+.login-center-glow{
+  position:absolute;width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,146,14,.14) 0%,transparent 70%);
+  pointer-events:none;
+  animation:lGlowPulse 5s ease-in-out infinite alternate;
+}
+@keyframes lGlowPulse{from{transform:scale(.85);opacity:.6}to{transform:scale(1.15);opacity:1}}
+/* 파티클 */
+.login-particle{
+  position:absolute;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(212,146,14,.8),rgba(212,146,14,0));
+  animation:lParticle linear infinite;
+}
+@keyframes lParticle{
+  0%  {transform:translateY(105vh) translateX(0) scale(0);opacity:0}
+  8%  {opacity:.9}
+  85% {opacity:.3}
+  100%{transform:translateY(-8vh) translateX(20px) scale(1.2);opacity:0}
+}
+/* SVG 배경 라인 */
+.login-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* ══ 로그인 박스 ══ */
 .login-box{
-  background:var(--cream);padding:48px 40px;width:min(460px,100%);
-  border-top:4px solid var(--gold);box-shadow:0 24px 64px rgba(0,0,0,.4);
+  background:rgba(247,237,216,.97);
+  padding:52px 44px 44px;width:min(460px,100%);
+  position:relative;z-index:2;
+  box-shadow:
+    0 0 0 1px rgba(212,146,14,.35),
+    0 32px 80px rgba(0,0,0,.55),
+    0 0 60px rgba(212,146,14,.07);
+  animation:lBoxIn .85s cubic-bezier(.22,1,.36,1) both;
 }
+@keyframes lBoxIn{
+  from{opacity:0;transform:translateY(28px) scale(.97)}
+  to  {opacity:1;transform:none}
+}
+/* 상단 금색 바 — 그라디언트 스윕 */
+.login-box::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#8B5010,#D4920E,#F5C842,#D4920E,#8B5010);
+  background-size:300% 100%;
+  animation:lGoldSweep 3.5s linear infinite;
+}
+@keyframes lGoldSweep{0%{background-position:0%}100%{background-position:300%}}
+
+/* 로고 */
 .login-logo{
-  font-family:'Nanum Myeongjo',serif;font-size:1.7rem;
-  font-weight:800;color:var(--brown);margin-bottom:6px;
+  font-family:'Nanum Myeongjo',serif;font-size:1.9rem;
+  font-weight:800;color:var(--brown);letter-spacing:.04em;
 }
+.login-logo-line{
+  height:2px;background:linear-gradient(90deg,var(--gold),rgba(212,146,14,0));
+  margin:10px 0 8px;border-radius:2px;
+  animation:lLinePulse 2.5s ease-in-out infinite alternate;
+}
+@keyframes lLinePulse{from{width:36px;opacity:.7}to{width:58px;opacity:1}}
 .login-sub{
-  font-size:.95rem;color:rgba(30,18,8,.5);
-  margin-bottom:36px;letter-spacing:.12em;
+  font-size:.76rem;color:rgba(30,18,8,.4);
+  margin-bottom:36px;letter-spacing:.3em;text-transform:uppercase;
 }
 .login-label{
-  display:block;font-size:.95rem;font-weight:700;
-  color:rgba(30,18,8,.7);margin-bottom:10px;
+  display:block;font-size:.88rem;font-weight:700;
+  color:rgba(30,18,8,.62);margin-bottom:8px;letter-spacing:.05em;
 }
+/* 인풋 + 언더라인 애니메이션 */
+.login-input-wrap{position:relative;margin-bottom:20px}
 .login-box input{
-  width:100%;padding:16px 18px;border:2px solid var(--border);
-  background:white;font-size:1.05rem;margin-bottom:16px;
+  width:100%;padding:16px 18px;display:block;
+  border:1.5px solid rgba(61,35,20,.18);
+  background:#fff;font-size:1.05rem;
   font-family:'Noto Sans KR',sans-serif;outline:none;
-  min-height:54px;transition:border-color .2s;
+  min-height:54px;transition:border-color .25s,box-shadow .25s;
 }
-.login-box input:focus{border-color:var(--ochre);}
+.login-box input:focus{
+  border-color:var(--gold);
+  box-shadow:0 4px 20px rgba(212,146,14,.13);
+}
+.login-input-underline{
+  position:absolute;bottom:0;left:50%;
+  width:0;height:2px;background:var(--gold);border-radius:2px;
+  transition:width .35s cubic-bezier(.4,0,.2,1),left .35s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+.login-input-wrap:focus-within .login-input-underline{
+  width:100%;left:0;
+}
+
+/* ══ 로그인 버튼 ══ */
 .login-btn{
-  width:100%;padding:18px;background:var(--brown);color:var(--cream);
-  border:none;font-size:1.05rem;letter-spacing:.12em;cursor:pointer;
-  font-family:'Noto Sans KR',sans-serif;min-height:58px;
-  transition:background .2s;font-weight:700;
+  width:100%;padding:18px 24px;margin-top:4px;
+  background:var(--brown);color:var(--cream);
+  border:none;font-size:1rem;letter-spacing:.18em;cursor:pointer;
+  font-family:'Noto Sans KR',sans-serif;min-height:58px;font-weight:700;
+  position:relative;overflow:hidden;
+  transition:background .25s, transform .18s, box-shadow .25s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
 }
-.login-btn:hover{background:var(--ochre);}
+/* 시머 스윕 */
+.login-btn::before{
+  content:'';position:absolute;top:0;left:-120%;
+  width:70%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);
+  transform:skewX(-18deg);transition:left .55s ease;pointer-events:none;
+}
+.login-btn:hover::before{left:160%}
+.login-btn:hover{
+  background:var(--ochre);
+  box-shadow:0 8px 28px rgba(212,146,14,.4),0 2px 8px rgba(0,0,0,.2);
+  transform:translateY(-2px);
+}
+.login-btn:active{transform:translateY(0) scale(.99);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+/* 화살표 */
+.lbtn-arrow{
+  display:inline-block;
+  transition:transform .2s;
+  font-style:normal;
+}
+.login-btn:hover .lbtn-arrow{transform:translateX(6px)}
+/* 로딩 상태 */
+.login-btn.loading{pointer-events:none;opacity:.85}
+.login-btn.loading .lbtn-label{opacity:0}
+.login-btn.loading::after{
+  content:'';position:absolute;
+  width:20px;height:20px;
+  border:2px solid rgba(247,237,216,.3);border-top-color:var(--cream);
+  border-radius:50%;animation:lSpin .65s linear infinite;
+}
+@keyframes lSpin{to{transform:rotate(360deg)}}
+/* 리플 */
+.lbtn-ripple{
+  position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.22);
+  transform:scale(0);animation:lRipple .6s linear;
+  pointer-events:none;
+}
+@keyframes lRipple{to{transform:scale(5);opacity:0}}
+
+/* 에러 — 쉐이크 */
 .login-error{
-  color:var(--red);font-size:.95rem;margin-top:12px;
-  display:none;padding:12px 16px;background:#fff5f5;
-  border-left:3px solid var(--red);
+  color:var(--red);font-size:.88rem;margin-top:14px;
+  display:none;padding:12px 16px;background:rgba(139,32,32,.07);
+  border-left:3px solid var(--red);letter-spacing:.02em;
+}
+.login-error.shake{animation:lShake .45s ease}
+@keyframes lShake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-9px)}
+  40%{transform:translateX(9px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+@media(max-width:480px){
+  .login-box{padding:40px 24px 36px}
 }
 
 /* ══ 앱 레이아웃 ══ */
@@ -417,13 +549,47 @@ tr:hover td{background:#FDFAF4;}
 
 <!-- ══ 로그인 ══ -->
 <div id="loginScreen">
+  <!-- 배경 레이어 -->
+  <div class="login-bg"></div>
+  <div class="login-center-glow"></div>
+  <!-- 배경 SVG 라인 -->
+  <svg class="login-lines" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <!-- 대각선 라인들 -->
+    <line x1="0" y1="180" x2="1200" y2="420" stroke="rgba(212,146,14,.05)" stroke-width="1.5"/>
+    <line x1="0" y1="520" x2="1200" y2="760" stroke="rgba(212,146,14,.04)" stroke-width="1"/>
+    <line x1="180" y1="0" x2="420" y2="800" stroke="rgba(212,146,14,.04)" stroke-width="1"/>
+    <line x1="780" y1="0" x2="1020" y2="800" stroke="rgba(212,146,14,.035)" stroke-width="1"/>
+    <!-- 교차점 마름모 -->
+    <path d="M 600 0 L 1200 400 L 600 800 L 0 400 Z" stroke="rgba(212,146,14,.04)" stroke-width="1" fill="none"/>
+    <path d="M 600 100 L 1100 400 L 600 700 L 100 400 Z" stroke="rgba(212,146,14,.03)" stroke-width="0.8" fill="none"/>
+    <!-- 모서리 장식 -->
+    <g stroke="rgba(212,146,14,.22)" stroke-width="1.2" fill="none">
+      <polyline points="30,30 100,30 100,50"/>
+      <polyline points="30,30 30,100 50,100"/>
+      <polyline points="1170,30 1100,30 1100,50"/>
+      <polyline points="1170,30 1170,100 1150,100"/>
+      <polyline points="30,770 100,770 100,750"/>
+      <polyline points="30,770 30,700 50,700"/>
+      <polyline points="1170,770 1100,770 1100,750"/>
+      <polyline points="1170,770 1170,700 1150,700"/>
+    </g>
+  </svg>
+
+  <!-- 로그인 박스 -->
   <div class="login-box">
     <div class="login-logo">횡성전통시장</div>
+    <div class="login-logo-line"></div>
     <div class="login-sub">관리자 페이지</div>
     <label class="login-label" for="pwInput">🔒 관리자 비밀번호</label>
-    <input type="password" id="pwInput" placeholder="비밀번호를 입력하세요"
-           onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">로그인 →</button>
+    <div class="login-input-wrap">
+      <input type="password" id="pwInput" placeholder="비밀번호를 입력하세요"
+             onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="login-input-underline"></div>
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">
+      <span class="lbtn-label">로그인</span>
+      <span class="lbtn-arrow">→</span>
+    </button>
     <div class="login-error" id="loginError">⚠️ 비밀번호가 올바르지 않습니다.</div>
   </div>
 </div>
@@ -799,6 +965,40 @@ function closeSidebar(){
   document.getElementById('adminSidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('show');
 }
+
+/* ── 로그인 화면 파티클 & 리플 ── */
+(function initLoginEffects(){
+  // 파티클 생성
+  const screen = document.getElementById('loginScreen');
+  if(!screen) return;
+  for(let i=0;i<18;i++){
+    const p = document.createElement('div');
+    p.className = 'login-particle';
+    const size = Math.random()*10+4;
+    const left = Math.random()*100;
+    const dur  = Math.random()*14+10;
+    const delay= Math.random()*-18;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${left}%;`
+      + `animation-duration:${dur}s;animation-delay:${delay}s;`
+      + `opacity:${Math.random()*.6+.2}`;
+    screen.appendChild(p);
+  }
+
+  // 버튼 리플
+  const btn = document.getElementById('loginBtn');
+  if(!btn) return;
+  btn.addEventListener('click', function(e){
+    const r = document.createElement('span');
+    r.className = 'lbtn-ripple';
+    const rect = btn.getBoundingClientRect();
+    const sz = Math.max(rect.width, rect.height);
+    r.style.cssText = `width:${sz}px;height:${sz}px;`
+      + `left:${e.clientX-rect.left-sz/2}px;`
+      + `top:${e.clientY-rect.top-sz/2}px`;
+    btn.appendChild(r);
+    setTimeout(()=>r.remove(), 650);
+  });
+})();
 </script>
 <script src="js/admin.js"></script>
 <script>
