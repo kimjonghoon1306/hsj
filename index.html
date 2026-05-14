@@ -3,323 +3,438 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 | 횡성전통시장</title>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--ink:#1E1208;--brown:#3D2314;--ochre:#B8751A;--gold:#D4920E;--cream:#F7EDD8;--red:#8B2020;--white:#FDFAF4;--border:rgba(61,35,20,0.12);--success:#1a6b2a;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans KR',sans-serif;background:#F5F0E8;color:var(--ink);}
-#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#1E1208 0%,#3D2314 100%);}
-.login-box{background:var(--cream);padding:48px;width:360px;border-top:4px solid var(--gold);}
-.login-box h1{font-family:'Nanum Myeongjo',serif;font-size:1.4rem;color:var(--brown);margin-bottom:6px;}
-.login-box p{font-size:0.8rem;color:rgba(30,18,8,0.5);margin-bottom:32px;letter-spacing:0.1em;}
-.login-box input{width:100%;padding:12px 16px;border:1px solid var(--border);background:white;font-size:0.9rem;margin-bottom:12px;font-family:'Noto Sans KR',sans-serif;outline:none;}
-.login-box input:focus{border-color:var(--ochre);}
-.login-btn{width:100%;padding:14px;background:var(--brown);color:var(--cream);border:none;font-size:0.9rem;letter-spacing:0.1em;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:background 0.2s;}
-.login-btn:hover{background:var(--ochre);}
-.login-error{color:var(--red);font-size:0.8rem;margin-top:8px;display:none;}
-#adminApp{display:none;min-height:100vh;}
-.admin-layout{display:flex;min-height:100vh;}
-.sidebar{width:240px;background:#1E1208;flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:10;}
-.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
-.sidebar-logo h2{font-family:'Nanum Myeongjo',serif;color:var(--gold);font-size:1rem;}
-.sidebar-logo span{font-size:0.7rem;color:rgba(247,237,216,0.4);letter-spacing:0.15em;}
-.sidebar-nav{flex:1;padding:16px 0;}
-.nav-item{display:flex;align-items:center;gap:12px;padding:13px 24px;cursor:pointer;color:rgba(247,237,216,0.55);font-size:0.85rem;letter-spacing:0.05em;transition:all 0.2s;border-left:3px solid transparent;}
-.nav-item:hover{color:var(--cream);background:rgba(255,255,255,0.05);}
-.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(212,146,14,0.08);}
-.nav-item .icon{font-size:1rem;width:20px;text-align:center;}
-.sidebar-bottom{padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);}
-.logout-btn{width:100%;padding:10px;background:rgba(139,32,32,0.3);color:rgba(247,237,216,0.7);border:1px solid rgba(139,32,32,0.4);font-size:0.8rem;cursor:pointer;font-family:'Noto Sans KR',sans-serif;letter-spacing:0.1em;transition:all 0.2s;}
-.logout-btn:hover{background:var(--red);color:var(--cream);}
-.main-content{margin-left:240px;flex:1;padding:40px;}
-.page-header{margin-bottom:32px;}
-.page-header h1{font-family:'Nanum Myeongjo',serif;font-size:1.8rem;color:var(--brown);}
-.page-header p{font-size:0.85rem;color:rgba(30,18,8,0.5);margin-top:6px;}
-.tab-page{display:none;}
-.tab-page.active{display:block;}
-.card{background:white;padding:28px;margin-bottom:24px;border:1px solid var(--border);}
-.card h3{font-family:'Nanum Myeongjo',serif;font-size:1rem;color:var(--brown);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;}
-.stat-card{background:white;padding:20px 24px;border:1px solid var(--border);border-top:3px solid var(--ochre);}
-.stat-card .s-num{font-family:'Nanum Myeongjo',serif;font-size:2rem;font-weight:800;color:var(--brown);}
-.stat-card .s-label{font-size:0.75rem;color:rgba(30,18,8,0.5);margin-top:4px;letter-spacing:0.1em;}
-.btn{padding:10px 20px;font-size:0.82rem;letter-spacing:0.08em;cursor:pointer;border:none;font-family:'Noto Sans KR',sans-serif;transition:all 0.2s;}
-.btn-primary{background:var(--brown);color:var(--cream);}
-.btn-primary:hover{background:var(--ochre);}
-.btn-danger{background:var(--red);color:white;}
-.btn-danger:hover{background:#a33;}
-.btn-sm{padding:6px 14px;font-size:0.78rem;}
-.btn-outline{background:none;border:1px solid var(--border);color:var(--ink);}
-.btn-outline:hover{border-color:var(--ochre);color:var(--ochre);}
-.btn-success{background:var(--success);color:white;}
-.form-group{margin-bottom:16px;}
-.form-group label{display:block;font-size:0.78rem;color:rgba(30,18,8,0.6);letter-spacing:0.1em;margin-bottom:6px;}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 14px;border:1px solid var(--border);font-size:0.88rem;font-family:'Noto Sans KR',sans-serif;outline:none;background:var(--white);}
-.form-group input:focus,.form-group textarea:focus{border-color:var(--ochre);}
-.form-group textarea{resize:vertical;min-height:90px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:0.85rem;}
-th{text-align:left;padding:10px 14px;background:#F5F0E8;font-size:0.75rem;letter-spacing:0.1em;color:rgba(30,18,8,0.55);border-bottom:1px solid var(--border);}
-td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle;}
-tr:last-child td{border-bottom:none;}
-tr:hover td{background:#FDFAF4;}
-.badge{display:inline-block;padding:3px 10px;font-size:0.72rem;border-radius:2px;letter-spacing:0.05em;}
-.badge-info{background:#E8F4FD;color:#1565C0;}
-.badge-event{background:#FFF3E0;color:#E65100;}
-.badge-notice{background:#F3E5F5;color:#6A1B9A;}
-.badge-pending{background:#FFF8E1;color:#F57F17;}
-.badge-confirmed{background:#E8F5E9;color:#2E7D32;}
-.badge-cancelled{background:#FFEBEE;color:#C62828;}
-.pinned-tag{color:var(--red);font-size:0.75rem;margin-left:6px;}
-.merchant-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
-.merchant-admin-card{background:var(--white);border:1px solid var(--border);padding:20px;position:relative;}
-.merchant-admin-card .m-emoji{font-size:2rem;margin-bottom:10px;}
-.merchant-admin-card h4{font-family:'Nanum Myeongjo',serif;font-size:1rem;color:var(--brown);margin-bottom:4px;}
-.merchant-admin-card .m-cat{font-size:0.72rem;color:var(--ochre);letter-spacing:0.1em;margin-bottom:8px;}
-.merchant-admin-card .m-desc{font-size:0.8rem;color:rgba(30,18,8,0.6);line-height:1.7;margin-bottom:12px;}
-.merchant-admin-card .m-actions{display:flex;gap:8px;}
-.modal-overlay{position:fixed;inset:0;background:rgba(30,18,8,0.7);display:none;align-items:center;justify-content:center;z-index:100;}
-.modal-overlay.open{display:flex;}
-.modal{background:white;width:540px;max-width:95vw;max-height:90vh;overflow-y:auto;}
-.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-header h3{font-family:'Nanum Myeongjo',serif;font-size:1.1rem;color:var(--brown);}
-.modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:rgba(30,18,8,0.4);line-height:1;}
-.modal-body{padding:24px;}
-.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
-.empty-state{text-align:center;padding:60px 24px;color:rgba(30,18,8,0.35);font-size:0.85rem;}
-.empty-state .e-icon{font-size:2.5rem;margin-bottom:12px;}
-
-/* ── 팝업 관리 UI ── */
-.popup-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
-.popup-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
-.popup-empty{text-align:center;padding:80px 24px;color:rgba(30,18,8,0.35);font-size:0.9rem;background:white;border:1px solid var(--border);}
-.popup-card{background:white;border:1px solid var(--border);overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;}
-.popup-card:hover{box-shadow:0 6px 24px rgba(61,35,20,0.1);transform:translateY(-2px);}
-.popup-card-active{border-color:var(--success);box-shadow:0 0 0 2px rgba(26,107,42,0.2);}
-.popup-card-thumb{height:160px;background:var(--parchment,#EFE0C0);position:relative;overflow:hidden;}
-.popup-active-badge{position:absolute;top:10px;right:10px;background:#1a6b2a;color:white;font-size:0.72rem;padding:4px 10px;letter-spacing:0.1em;}
-.popup-card-body{padding:16px 20px 12px;}
-.popup-card-title{font-family:'Nanum Myeongjo',serif;font-size:1rem;font-weight:800;color:var(--brown);margin-bottom:6px;}
-.popup-card-content{font-size:0.8rem;color:rgba(30,18,8,0.55);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.popup-card-date{font-size:0.72rem;color:rgba(30,18,8,0.35);margin-top:8px;}
-.popup-card-actions{display:flex;gap:6px;padding:12px 20px 16px;border-top:1px solid var(--border);}
-.popup-modal-img-area{border:2px dashed var(--border);padding:20px;text-align:center;cursor:pointer;transition:border-color 0.2s;position:relative;}
-.popup-modal-img-area:hover{border-color:var(--ochre);}
-.file-input-hidden{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-</style>
+<title>횡성전통시장 — 강원도 백 년 오일장</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div id="loginScreen">
-  <div class="login-box">
-    <h1>횡성전통시장</h1>
-    <p>ADMIN DASHBOARD</p>
-    <input type="password" id="pwInput" placeholder="관리자 비밀번호" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()">로그인</button>
-    <div class="login-error" id="loginError">비밀번호가 올바르지 않습니다.</div>
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="nav-logo">
+    횡성전통시장
+    <span>HOENGSEONG TRADITIONAL MARKET</span>
+  </a>
+  <div class="nav-links">
+    <a href="#about">시장 소개</a>
+    <a href="#specialties">특산물</a>
+    <a href="#calendar">장날 캘린더</a>
+    <a href="#news">뉴스</a>
+    <a href="#notices">공지사항</a>
+    <a href="#merchants">상인 소개</a>
+    <a href="#reserve">방문 예약</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">SINCE 1924 · HOENGSEONG TRADITIONAL MARKET</div>
+    <h1 class="hero-title">횡성<br><span class="accent">전통시장</span></h1>
+    <p class="hero-sub">강원도 횡성의 백 년 전통 오일장</p>
+    <div class="hero-market-days">
+      <div class="dday-item">
+        <div class="label">장날</div>
+        <div class="days">매월 1·6일</div>
+      </div>
+      <div class="dday-divider" style="background:rgba(212,146,14,0.4);"></div>
+      <div class="dday-item">
+        <div class="label">운영 시간</div>
+        <div class="days" style="font-size:1.1rem;">오전 7시 — 오후 6시</div>
+      </div>
+    </div>
+    <a href="#calendar" class="hero-cta">장날 캘린더 보기 →</a>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── D-DAY BANNER ── -->
+<div id="ddayBanner" class="dday-banner">
+  <div class="dday-item">
+    <span id="ddayNum" class="dday-num">D-?</span>
+    <span class="dday-label">MARKET DAY</span>
+  </div>
+  <div class="dday-divider"></div>
+  <div class="dday-item">
+    <span id="nextDate" class="dday-num" style="font-size:1.6rem;">—</span>
+    <span class="dday-label">다음 장날</span>
+  </div>
+  <div class="dday-divider"></div>
+  <div id="ddayMsg" class="dday-msg">장날 정보를 불러오는 중...</div>
+  <div class="dday-divider"></div>
+  <div class="dday-item">
+    <span id="liveClock" class="dday-num" style="font-size:1.6rem;font-variant-numeric:tabular-nums;letter-spacing:0.05em;">00:00:00</span>
+    <span id="liveDate" class="dday-label">날짜 로딩 중</span>
   </div>
 </div>
 
-<div id="adminApp">
-  <div class="admin-layout">
-    <aside class="sidebar">
-      <div class="sidebar-logo">
-        <h2>횡성전통시장</h2>
-        <span>ADMIN PANEL</span>
+<!-- ── ABOUT ── -->
+<section class="about fade-in" id="about">
+  <div class="fade-in-left">
+    <div class="about-frame">
+      <div class="about-frame-inner">
+        <div class="about-icon">🏛️</div>
+        <div class="about-frame-text">횡성전통시장<br><span style="font-size:0.85rem;opacity:0.6;">1924년 개장</span></div>
       </div>
-      <nav class="sidebar-nav">
-        <div class="nav-item active" onclick="switchTab('dashboard',this)"><span class="icon">📊</span> 대시보드</div>
-        <div class="nav-item" onclick="switchTab('notices',this)"><span class="icon">📣</span> 공지사항</div>
-        <div class="nav-item" onclick="switchTab('merchants',this)"><span class="icon">🏪</span> 상인 관리</div>
-        <div class="nav-item" onclick="switchTab('reservations',this)"><span class="icon">📋</span> 예약 관리</div>
-        <div class="nav-item" onclick="switchTab('popup',this)"><span class="icon">🪟</span> 팝업 관리</div>
-        <div class="nav-item" onclick="location.href='index.html'"><span class="icon">🏠</span> 대문으로 가기</div>
-        <div class="nav-item" onclick="openModal('guideModal')" style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.06);"><span class="icon">📖</span> 사용 방법</div>
-      </nav>
-      <div class="sidebar-bottom">
-        <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+    </div>
+  </div>
+  <div class="fade-in-right">
+    <div class="section-tag">시장 소개</div>
+    <h2 class="section-title">동대문 밖 가장 큰 장터,<br>백 년의 전통</h2>
+    <p class="section-desc">조선시대 후기 자연 발생한 횡성장은 일제강점기에 이르러 "동대문 밖 제일가는 장"이라 불릴 만큼 전국적인 명성을 얻었습니다. 수도권과 강원도를 잇는 지리적 요충지에 위치하여 지역 경제의 중심지로 자리매김하고 있습니다.</p>
+    <div class="about-stats">
+      <div class="stat-box fade-in-scale">
+        <span class="stat-num">140+</span>
+        <span class="stat-label">운영 점포 수</span>
       </div>
-    </aside>
-
-    <main class="main-content">
-
-      <!-- 대시보드 -->
-      <div id="tab-dashboard" class="tab-page active">
-        <div class="page-header"><h1>대시보드</h1><p id="dashDate"></p></div>
-        <div class="stats-grid" id="statsGrid"></div>
-        <div class="card"><h3>📅 다음 장날</h3><div id="dashNextMarket" style="font-family:'Nanum Myeongjo',serif;font-size:1.5rem;color:var(--red);"></div></div>
-        <div class="card"><h3>📋 최근 예약</h3><div id="dashRecentRes"></div></div>
+      <div class="stat-box fade-in-scale">
+        <span class="stat-num">100</span>
+        <span class="stat-label">년 전통</span>
       </div>
-
-      <!-- 공지사항 -->
-      <div id="tab-notices" class="tab-page">
-        <div class="page-header"><h1>공지사항 관리</h1><p>시장 공지 및 이벤트를 관리합니다.</p></div>
-        <div style="margin-bottom:20px;"><button class="btn btn-primary" onclick="openNoticeModal()">+ 공지 작성</button></div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>제목</th><th>유형</th><th>날짜</th><th>상태</th><th>관리</th></tr></thead><tbody id="noticeTableBody"></tbody></table></div></div>
+      <div class="stat-box fade-in-scale">
+        <span class="stat-num">5</span>
+        <span class="stat-label">일장 운영</span>
       </div>
-
-      <!-- 상인 -->
-      <div id="tab-merchants" class="tab-page">
-        <div class="page-header"><h1>상인 관리</h1><p>시장 상인 소개 페이지를 관리합니다.</p></div>
-        <div style="margin-bottom:20px;"><button class="btn btn-primary" onclick="openMerchantModal()">+ 상인 등록</button></div>
-        <div class="merchant-grid" id="merchantGrid"></div>
+      <div class="stat-box fade-in-scale">
+        <span class="stat-num">2013</span>
+        <span class="stat-label">문화관광형 지정</span>
       </div>
+    </div>
+  </div>
+</section>
 
-      <!-- 예약 -->
-      <div id="tab-reservations" class="tab-page">
-        <div class="page-header"><h1>예약 관리</h1><p>방문 예약 신청을 확인하고 관리합니다.</p></div>
-        <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
-          <button class="btn btn-outline" onclick="filterRes('all')">전체</button>
-          <button class="btn btn-outline" onclick="filterRes('pending')">대기중</button>
-          <button class="btn btn-outline" onclick="filterRes('confirmed')">확정</button>
-          <button class="btn btn-outline" onclick="filterRes('cancelled')">취소</button>
+<div class="divider"></div>
+
+<!-- ── SPECIALTIES ── -->
+<section class="specialties fade-in" id="specialties">
+  <div class="section-tag" style="color:var(--gold);">특산물</div>
+  <h2 class="section-title">횡성을 대표하는<br>명품 특산물</h2>
+  <p class="section-desc">강원도 청정 자연에서 자란 횡성의 명품 특산물을 만나보세요. 오직 횡성 전통시장에서만 만날 수 있는 신선하고 품질 좋은 특산물이 가득합니다.</p>
+  <div class="products-grid">
+    <div class="product-card">
+      <span class="product-emoji">🥩</span>
+      <div class="product-name">횡성 한우</div>
+      <p class="product-desc">청정 강원 자연환경에서 자란 국내 최고 품질의 한우. 풍부한 육즙과 높은 불포화지방산 함량으로 전국 미식가들의 사랑을 받고 있습니다.</p>
+      <span class="product-arrow">→</span>
+    </div>
+    <div class="product-card">
+      <span class="product-emoji">🌿</span>
+      <div class="product-name">횡성 더덕</div>
+      <p class="product-desc">해발 200~400m 고원에서 자란 야생 더덕. 향이 진하고 약성이 뛰어나 전통 한방에서도 귀하게 여겨온 강원도 대표 산나물입니다.</p>
+      <span class="product-arrow">→</span>
+    </div>
+    <div class="product-card">
+      <span class="product-emoji">🌽</span>
+      <div class="product-name">횡성 찰옥수수</div>
+      <p class="product-desc">맑은 물과 서늘한 기후가 만들어낸 쫄깃하고 달콤한 찰옥수수. 여름 제철에만 맛볼 수 있는 횡성의 별미입니다.</p>
+      <span class="product-arrow">→</span>
+    </div>
+    <div class="product-card">
+      <span class="product-emoji">🍄</span>
+      <div class="product-name">강원 산나물</div>
+      <p class="product-desc">취나물·곰취·참나물 등 강원도 깊은 산에서 채취한 신선한 산나물. 할머니 상인들이 직접 채취해 당일 판매합니다.</p>
+      <span class="product-arrow">→</span>
+    </div>
+    <div class="product-card">
+      <span class="product-emoji">🥛</span>
+      <div class="product-name">횡성 유제품</div>
+      <p class="product-desc">횡성 청정 목장에서 생산된 신선한 우유와 유제품. 목장 직송으로 신선도가 높고 고소한 맛이 일품입니다.</p>
+      <span class="product-arrow">→</span>
+    </div>
+    <div class="product-card">
+      <span class="product-emoji">🌾</span>
+      <div class="product-name">강원 잡곡</div>
+      <p class="product-desc">깨끗한 강원도 밭에서 재배한 흑미·수수·기장 등 다양한 잡곡류. 건강을 생각한 소비자에게 꼭 필요한 먹거리입니다.</p>
+      <span class="product-arrow">→</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── CALENDAR ── -->
+<section class="calendar-section fade-in" id="calendar">
+  <div class="section-tag">장날 캘린더</div>
+  <h2 class="section-title">2026년 장날 일정</h2>
+  <p class="section-desc">매월 1일, 6일, 11일, 16일, 21일, 26일에 5일장이 열립니다. 방문 전 꼭 장날을 확인하세요.</p>
+
+  <div class="calendar-layout">
+    <!-- 캘린더 위젯 -->
+    <div>
+      <div class="cal-nav">
+        <button id="calPrev" class="cal-nav-btn">◀</button>
+        <span id="calMonthTitle" class="cal-title">2026년 5월</span>
+        <button id="calNext" class="cal-nav-btn">▶</button>
+      </div>
+      <div class="cal-header">
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+      </div>
+      <div id="calGrid" class="cal-grid"></div>
+      <div class="cal-legend">
+        <div class="cal-legend-dot"></div>
+        <span class="cal-legend-text">장날 (1·6일 끝자리)</span>
+      </div>
+      <div class="market-day-list" style="margin-top:20px;">
+        <div class="market-day-list-title">이 달의 장날</div>
+        <div id="marketDayChips" class="market-day-chips"></div>
+      </div>
+    </div>
+
+    <!-- 시장 안내 정보 -->
+    <div class="market-info-list">
+      <div class="info-row">
+        <div class="info-icon">📅</div>
+        <div class="info-content">
+          <div class="info-label">장날 주기</div>
+          <div class="info-val">매월 1·6·11·16·21·26일<br>끝자리 1, 6이면 장날!</div>
         </div>
-        <div class="card"><div class="table-wrap"><table><thead><tr><th>신청일</th><th>이름</th><th>연락처</th><th>방문 희망일</th><th>인원</th><th>목적</th><th>상태</th><th>관리</th></tr></thead><tbody id="resTableBody"></tbody></table></div></div>
       </div>
-
-      <!-- 팝업 관리 -->
-      <div id="tab-popup" class="tab-page">
-        <div class="page-header"><h1>팝업 관리</h1><p>메인 페이지 팝업을 등록하고 관리합니다. 활성화된 팝업 1개가 메인에 표시됩니다.</p></div>
-        <div class="popup-toolbar">
-          <div style="font-size:0.85rem;color:rgba(30,18,8,0.5);">팝업 목록</div>
-          <button class="btn btn-primary" onclick="openPopupModal()">+ 새 팝업 만들기</button>
+      <div class="info-row">
+        <div class="info-icon">🕐</div>
+        <div class="info-content">
+          <div class="info-label">운영 시간</div>
+          <div class="info-val">오전 7:00 — 오후 6:00<br>상설시장은 매일 운영</div>
         </div>
-        <div class="popup-list" id="popupListContainer"></div>
       </div>
-
-    </main>
-  </div>
-</div>
-
-<!-- 공지 모달 -->
-<div class="modal-overlay" id="noticeModal">
-  <div class="modal">
-    <div class="modal-header"><h3 id="noticeMtitle">공지 작성</h3><button class="modal-close" onclick="closeModal('noticeModal')">×</button></div>
-    <div class="modal-body">
-      <input type="hidden" id="noticeId">
-      <div class="form-group"><label>제목</label><input type="text" id="noticeTitle" placeholder="공지 제목을 입력하세요"></div>
-      <div class="form-row">
-        <div class="form-group"><label>유형</label><select id="noticeType"><option value="info">일반 공지</option><option value="event">이벤트</option><option value="notice">긴급 공지</option></select></div>
-        <div class="form-group"><label>상단 고정</label><select id="noticePinned"><option value="false">일반</option><option value="true">상단 고정</option></select></div>
-      </div>
-      <div class="form-group"><label>내용</label><textarea id="noticeContent" placeholder="공지 내용을 입력하세요"></textarea></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('noticeModal')">취소</button><button class="btn btn-primary" onclick="saveNotice()">저장</button></div>
-  </div>
-</div>
-
-<!-- 상인 모달 -->
-<div class="modal-overlay" id="merchantModal">
-  <div class="modal">
-    <div class="modal-header"><h3 id="merchantMtitle">상인 등록</h3><button class="modal-close" onclick="closeModal('merchantModal')">×</button></div>
-    <div class="modal-body">
-      <input type="hidden" id="merchantId">
-      <div class="form-row">
-        <div class="form-group"><label>상호명</label><input type="text" id="merchantName" placeholder="예) 횡성한우 직판장"></div>
-        <div class="form-group"><label>이모지</label><input type="text" id="merchantEmoji" placeholder="예) 🥩"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>카테고리</label><input type="text" id="merchantCategory" placeholder="예) 한우·정육"></div>
-        <div class="form-group"><label>영업 연수</label><input type="text" id="merchantYears" placeholder="예) 20년"></div>
-      </div>
-      <div class="form-group"><label>연락처</label><input type="text" id="merchantPhone" placeholder="010-0000-0000"></div>
-      <div class="form-group"><label>취급 품목</label><input type="text" id="merchantItems" placeholder="예) 한우 등심, 갈비, 안심"></div>
-      <div class="form-group"><label>소개글</label><textarea id="merchantDesc" placeholder="상인 소개를 입력하세요"></textarea></div>
-    </div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('merchantModal')">취소</button><button class="btn btn-primary" onclick="saveMerchant()">저장</button></div>
-  </div>
-</div>
-
-<!-- 팝업 모달 -->
-<div class="modal-overlay" id="popupModal">
-  <div class="modal" style="width:580px;">
-    <div class="modal-header"><h3 id="pmMtitle">새 팝업 만들기</h3><button class="modal-close" onclick="closeModal('popupModal')">×</button></div>
-    <div class="modal-body">
-      <input type="hidden" id="pmId">
-      <div class="form-group"><label>팝업 제목</label><input type="text" id="pmTitle" placeholder="예) 6월 장날 특별 이벤트"></div>
-      <div class="form-group"><label>팝업 내용</label><textarea id="pmContent" placeholder="팝업에 표시될 내용을 입력하세요" style="min-height:100px;"></textarea></div>
-      <div class="form-group">
-        <label>이미지 업로드</label>
-        <div class="popup-modal-img-area">
-          <input type="file" class="file-input-hidden" id="pmImageFile" accept="image/*" onchange="pmUploadImage(event)">
-          <div id="pmImagePreview">
-            <div style="font-size:2rem;margin-bottom:8px;">📷</div>
-            <div style="font-size:0.82rem;color:rgba(30,18,8,0.4);">클릭하여 이미지 업로드</div>
-          </div>
+      <div class="info-row">
+        <div class="info-icon">📍</div>
+        <div class="info-content">
+          <div class="info-label">위치</div>
+          <div class="info-val">강원특별자치도 횡성군<br>횡성읍 횡성로 19</div>
         </div>
-        <div id="pmUploadStatus" style="margin-top:8px;font-size:0.8rem;"></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🚗</div>
+        <div class="info-content">
+          <div class="info-label">서울에서 접근</div>
+          <div class="info-val">서울춘천고속도로 → 횡성IC<br>약 1시간 30분 소요</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🚌</div>
+        <div class="info-content">
+          <div class="info-label">대중교통</div>
+          <div class="info-val">동서울터미널 → 횡성 버스<br>1일 다수 운행</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🅿️</div>
+        <div class="info-content">
+          <div class="info-label">주차 안내</div>
+          <div class="info-val">시장 내 무료 주차 가능<br>장날에는 혼잡 예상</div>
+        </div>
       </div>
     </div>
-    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('popupModal')">취소</button><button class="btn btn-primary" onclick="savePopup()">저장</button></div>
+  </div>
+</section>
+
+<!-- ── NEWS ── -->
+<section class="news-section fade-in" id="news">
+  <div class="section-tag">시장 이야기</div>
+  <h2 class="section-title">횡성전통시장 뉴스</h2>
+  <p class="section-desc">시장의 역사, 특산물 이야기, 여행 정보까지 — 횡성전통시장에 관한 모든 이야기를 담았습니다.</p>
+  <div id="newsCategoryTabs" class="news-category-tabs"></div>
+  <div id="newsGrid" class="news-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── NOTICES ── -->
+<section class="notice-section fade-in" id="notices">
+  <div class="section-tag">공지사항</div>
+  <h2 class="section-title">시장 소식</h2>
+  <p class="section-desc">횡성전통시장의 새로운 소식과 이벤트 정보를 확인하세요.</p>
+  <div id="noticeList" class="notice-list"></div>
+</section>
+
+<!-- ── MERCHANTS ── -->
+<section class="merchant-section fade-in" id="merchants">
+  <div class="section-tag">상인 소개</div>
+  <h2 class="section-title">시장을 지키는<br>우리 상인들</h2>
+  <p class="section-desc">대를 이어 자리를 지켜온 횡성전통시장의 상인들을 소개합니다. 각자의 자리에서 최고의 품질을 위해 노력하고 있습니다.</p>
+  <div id="merchantPubGrid" class="merchant-pub-grid"></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── RESERVE ── -->
+<section class="reserve-section fade-in" id="reserve">
+  <div class="section-tag">방문 예약</div>
+  <h2 class="section-title">단체 방문 예약</h2>
+  <p class="section-desc">단체 관람·체험 신청을 접수합니다. 담당자 확인 후 연락드리겠습니다.</p>
+
+  <div class="reserve-layout">
+    <div class="reserve-form">
+      <div class="rform-group">
+        <label>이름 / 단체명 *</label>
+        <input type="text" id="resName" placeholder="홍길동 / 홍길동 초등학교">
+      </div>
+      <div class="rform-row">
+        <div class="rform-group">
+          <label>연락처 *</label>
+          <input type="tel" id="resPhone" placeholder="010-0000-0000">
+        </div>
+        <div class="rform-group">
+          <label>방문 인원 *</label>
+          <input type="number" id="resPeople" placeholder="예) 30" min="1">
+        </div>
+      </div>
+      <div class="rform-group">
+        <label>방문 희망일 *</label>
+        <input type="date" id="resDate">
+      </div>
+      <div class="rform-group">
+        <label>방문 목적</label>
+        <textarea id="resPurpose" placeholder="예) 학교 현장 체험학습, 단체 관광 등"></textarea>
+      </div>
+      <button class="reserve-btn" onclick="submitReservation()">예약 신청하기</button>
+      <div id="reserveResult"></div>
+    </div>
+
+    <div class="reserve-info">
+      <div class="rinfo-card">
+        <div class="rinfo-icon">👥</div>
+        <div>
+          <div class="rinfo-label">단체 기준</div>
+          <div class="rinfo-val">10인 이상 단체 예약 가능</div>
+        </div>
+      </div>
+      <div class="rinfo-card">
+        <div class="rinfo-icon">📞</div>
+        <div>
+          <div class="rinfo-label">문의 전화</div>
+          <div class="rinfo-val">033-000-0000</div>
+        </div>
+      </div>
+      <div class="rinfo-card">
+        <div class="rinfo-icon">⏰</div>
+        <div>
+          <div class="rinfo-label">처리 시간</div>
+          <div class="rinfo-val">신청 후 1~2 영업일 내 연락</div>
+        </div>
+      </div>
+      <div class="rinfo-note">
+        ※ 장날(끝자리 1·6일)에 방문하시면 활기찬 오일장 문화를 직접 체험하실 수 있습니다.<br>
+        ※ 한우 시식, 전통 음식 체험 등 별도 프로그램 문의는 전화로 연락 주세요.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACCESS ── -->
+<section class="access fade-in" id="access">
+  <div class="section-tag">오시는 길</div>
+  <h2 class="section-title">횡성전통시장<br>찾아오기</h2>
+
+  <div class="access-grid">
+    <div class="access-card">
+      <h3>🚗 자가용</h3>
+      <p>
+        서울 → 서울춘천고속도로<br>
+        → 횡성IC → 시내 방면 5분<br>
+        강릉 → 영동고속도로<br>
+        → 횡성IC → 시내 방면 5분<br>
+        <br>
+        <strong>소요 시간:</strong> 서울 약 1시간 30분
+      </p>
+    </div>
+    <div class="access-card">
+      <h3>🚌 버스</h3>
+      <p>
+        동서울터미널 → 횡성<br>
+        1일 10여 회 운행<br>
+        약 1시간 40분 소요<br>
+        <br>
+        강남고속버스터미널<br>
+        → 원주 → 횡성 환승<br>
+        <br>
+        <strong>하차:</strong> 횡성시외버스터미널
+      </p>
+    </div>
+    <div class="access-card">
+      <h3>🚆 기차 + 버스</h3>
+      <p>
+        청량리 → KTX → 만종역<br>
+        약 40분 소요<br>
+        <br>
+        만종역에서 횡성 버스 환승<br>
+        약 20분 소요<br>
+        <br>
+        <strong>총 소요:</strong> 약 1시간
+      </p>
+    </div>
+  </div>
+
+  <div class="access-map">
+    <span style="font-size:2rem;">📍</span>
+    <span>강원특별자치도 횡성군 횡성읍 횡성로 19</span>
+    <span style="font-size:0.75rem;opacity:0.6;">지도 서비스 준비 중</span>
+  </div>
+
+  <div class="contact-bar">
+    <div>
+      <div class="ct-label">대표 전화</div>
+      <div class="ct-val">033-000-0000</div>
+    </div>
+    <div>
+      <div class="ct-label">팩스</div>
+      <div class="ct-val">033-000-0001</div>
+    </div>
+    <div>
+      <div class="ct-label">이메일</div>
+      <div class="ct-val">info@hsj-market.kr</div>
+    </div>
+    <div>
+      <div class="ct-label">운영 시간</div>
+      <div class="ct-val">월–토 09:00–18:00</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-brand">횡성전통시장</div>
+    <p class="footer-sub">강원특별자치도 횡성군 횡성읍 횡성로 19<br>대표전화 033-000-0000 · 팩스 033-000-0001<br>사업자등록번호 000-00-00000</p>
+    <p class="footer-copy">© 2026 횡성전통시장 상인회. All rights reserved.</p>
+  </div>
+  <div class="footer-links">
+    <a href="#about">시장 소개</a>
+    <a href="#specialties">특산물</a>
+    <a href="#calendar">장날 캘린더</a>
+    <a href="#news">뉴스</a>
+    <a href="#notices">공지사항</a>
+    <a href="#merchants">상인 소개</a>
+    <a href="#reserve">방문 예약</a>
+    <a href="admin.html">관리자</a>
+  </div>
+</footer>
+
+<!-- ── 팝업 오버레이 ── -->
+<div id="sitePopupOverlay">
+  <div id="sitePopupBox">
+    <button class="popup-close-x" onclick="closePopup()">×</button>
+    <div id="sitePopupImg"></div>
+    <div style="padding:24px 28px 12px;">
+      <div style="font-family:'Nanum Myeongjo',serif;font-size:1.3rem;font-weight:800;color:var(--brown);margin-bottom:10px;" id="sitePopupTitle"></div>
+      <div style="font-size:0.88rem;color:rgba(30,18,8,0.7);line-height:1.8;" id="sitePopupContent"></div>
+    </div>
+    <div class="popup-btn-row">
+      <button class="popup-btn" onclick="closePopupWeek()">일주일간 안보기</button>
+      <button class="popup-btn" onclick="closePopup()">닫기</button>
+    </div>
   </div>
 </div>
 
-<!-- 사용방법 모달 -->
-<div class="modal-overlay" id="guideModal">
-  <div class="modal" style="width:620px;">
-    <div class="modal-header">
-      <h3>📖 관리자 사용 방법</h3>
-      <button class="modal-close" onclick="closeModal('guideModal')">×</button>
-    </div>
-    <div class="modal-body" style="font-size:0.88rem;line-height:1.9;color:rgba(30,18,8,0.75);">
-
-      <div style="background:#f5f0e8;padding:16px 20px;margin-bottom:20px;border-left:3px solid var(--ochre);">
-        <strong style="font-family:'Nanum Myeongjo',serif;color:var(--brown);">횡성전통시장 관리자 시스템</strong><br>
-        이 페이지에서 시장 웹사이트의 모든 콘텐츠를 관리합니다.
-      </div>
-
-      <div style="margin-bottom:20px;">
-        <div style="font-family:'Nanum Myeongjo',serif;font-size:1rem;font-weight:800;color:var(--brown);margin-bottom:10px;">📣 공지사항</div>
-        <ul style="padding-left:18px;">
-          <li><strong>+ 공지 작성</strong> 버튼으로 새 공지를 등록합니다.</li>
-          <li>유형은 <em>일반공지 / 이벤트 / 긴급</em> 중 선택합니다.</li>
-          <li><strong>상단 고정</strong>으로 설정하면 공지 목록 맨 위에 표시됩니다.</li>
-          <li>숨김 처리 시 방문자에게 보이지 않습니다.</li>
-        </ul>
-      </div>
-
-      <div style="margin-bottom:20px;">
-        <div style="font-family:'Nanum Myeongjo',serif;font-size:1rem;font-weight:800;color:var(--brown);margin-bottom:10px;">🏪 상인 관리</div>
-        <ul style="padding-left:18px;">
-          <li><strong>+ 상인 등록</strong> 버튼으로 새 상인을 추가합니다.</li>
-          <li>이모지(🥩🌿🍄 등)를 활용하면 시각적으로 구분됩니다.</li>
-          <li>등록된 상인은 메인 페이지 <em>상인 소개</em> 섹션에 자동 표시됩니다.</li>
-        </ul>
-      </div>
-
-      <div style="margin-bottom:20px;">
-        <div style="font-family:'Nanum Myeongjo',serif;font-size:1rem;font-weight:800;color:var(--brown);margin-bottom:10px;">📋 예약 관리</div>
-        <ul style="padding-left:18px;">
-          <li>방문자가 신청한 예약이 <em>대기중</em> 상태로 접수됩니다.</li>
-          <li><strong>확정</strong> 버튼으로 예약을 승인합니다.</li>
-          <li>상단 필터로 대기중 / 확정 / 취소 예약을 구분해서 볼 수 있습니다.</li>
-        </ul>
-      </div>
-
-      <div style="margin-bottom:8px;">
-        <div style="font-family:'Nanum Myeongjo',serif;font-size:1rem;font-weight:800;color:var(--brown);margin-bottom:10px;">🪟 팝업 관리</div>
-        <ul style="padding-left:18px;">
-          <li><strong>+ 새 팝업 만들기</strong>로 팝업을 여러 개 등록할 수 있습니다.</li>
-          <li>이미지는 클릭 영역을 눌러 업로드합니다 (자동으로 서버에 저장됨).</li>
-          <li><strong>활성화</strong> 버튼을 누른 팝업 1개만 메인 페이지에 표시됩니다.</li>
-          <li>방문자가 <em>일주일간 안보기</em>를 클릭하면 7일간 팝업이 뜨지 않습니다.</li>
-          <li>팝업을 끄려면 <strong>비활성화</strong> 버튼을 누르세요.</li>
-        </ul>
-      </div>
-
-      <div style="background:#fff9f5;border:1px solid rgba(139,32,32,0.15);padding:14px 18px;margin-top:20px;font-size:0.82rem;color:rgba(30,18,8,0.6);">
-        💡 <strong>데이터 저장 방식</strong>: 모든 데이터는 해당 브라우저의 로컬 저장소에 저장됩니다. 다른 기기에서도 동일하게 보이려면 Firebase 연동이 필요합니다.
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" onclick="closeModal('guideModal')">확인</button>
-    </div>
-  </div>
-</div>
+<!-- ── 관리자 버튼 ── -->
+<a href="admin.html" class="admin-gear" title="관리자 페이지">⚙️</a>
 
 <script src="js/store.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/main.js"></script>
+<script src="js/news.js"></script>
+<script src="js/public.js"></script>
 </body>
 </html>
