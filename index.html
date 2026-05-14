@@ -6,6 +6,580 @@
 <title>횡성전통시장 — 우하하 횡성한우시장</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style id="mobile-fix">
+/* ════════════════════════════════════════════
+   모바일 최적화 · 어르신 친화 CSS
+   ════════════════════════════════════════════ */
+
+/* 1. 가로 스크롤 완전 차단 */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  -webkit-text-size-adjust: 100%;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 2. 어르신 기본 폰트 크기 향상 */
+body {
+  font-size: 17px !important;
+  line-height: 1.85 !important;
+}
+
+/* ── 네비게이션 모바일 ── */
+nav {
+  padding: 0 16px !important;
+  position: relative;
+}
+.nav-logo {
+  font-size: clamp(1rem, 4vw, 1.2rem) !important;
+}
+.nav-logo span {
+  display: none !important;
+}
+
+/* 모바일 햄버거 버튼 */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--gold, #D4920E);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .nav-hamburger { display: flex; }
+
+  .nav-links {
+    display: none !important;
+    position: fixed !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(6,4,2,0.97) !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    z-index: 9999 !important;
+    padding: 60px 32px 40px !important;
+    width: 100% !important;
+  }
+  .nav-links.open {
+    display: flex !important;
+  }
+  .nav-links a {
+    font-size: 1.35rem !important;
+    padding: 16px 0 !important;
+    letter-spacing: .12em !important;
+    width: 100% !important;
+    text-align: center !important;
+    border-bottom: 1px solid rgba(212,146,14,.15) !important;
+  }
+  .nav-links a:last-child {
+    border-bottom: none !important;
+  }
+  /* 닫기 버튼 */
+  .nav-close-btn {
+    position: absolute;
+    top: 18px; right: 18px;
+    font-size: 1.8rem;
+    color: var(--gold, #D4920E);
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+  }
+}
+
+/* ── D-Day 배너 ── */
+.dday-banner {
+  flex-wrap: wrap !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+@media (max-width: 768px) {
+  .dday-banner {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    padding: 0 !important;
+  }
+  .dday-banner .dday-item {
+    padding: 14px 12px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .dday-banner .dday-divider {
+    display: none !important;
+  }
+  .dday-banner .dday-msg {
+    grid-column: 1 / -1 !important;
+    text-align: center !important;
+    padding: 10px 16px !important;
+    font-size: .9rem !important;
+    line-height: 1.6 !important;
+    border-top: 1px solid rgba(212,146,14,.2) !important;
+  }
+  .dday-num {
+    font-size: 1.6rem !important;
+  }
+  .dday-label {
+    font-size: .72rem !important;
+  }
+}
+
+/* ── Hero 섹션 ── */
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 0 20px !important;
+    max-width: 100% !important;
+  }
+  .hero-badge {
+    font-size: .6rem !important;
+    letter-spacing: .15em !important;
+    padding: 6px 14px !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+  }
+  .hero-title {
+    font-size: clamp(3rem, 15vw, 4.5rem) !important;
+  }
+  .hero-sub {
+    font-size: 1.05rem !important;
+  }
+  .hero-sub2 {
+    font-size: 1.1rem !important;
+    margin-top: -16px !important;
+    margin-bottom: 28px !important;
+  }
+  .hero-market-days {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    padding: 14px 16px !important;
+    justify-content: center !important;
+  }
+  .hero-market-days .dday-item .days {
+    font-size: .95rem !important;
+  }
+  .hero-cta {
+    font-size: .95rem !important;
+    padding: 14px 32px !important;
+    letter-spacing: .1em !important;
+  }
+}
+
+/* ── About 섹션 ── */
+.about {
+  overflow: hidden !important;
+}
+@media (max-width: 900px) {
+  .about {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 32px !important;
+    padding: 60px 20px !important;
+  }
+  .about .fade-in-left,
+  .about .fade-in-right {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .about-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+  .stat-box {
+    padding: 16px 10px !important;
+  }
+  .stat-num {
+    font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
+  }
+  .stat-label {
+    font-size: .82rem !important;
+  }
+  .section-title {
+    font-size: clamp(1.5rem, 6vw, 2.4rem) !important;
+    word-break: keep-all !important;
+  }
+  .section-desc {
+    font-size: 1rem !important;
+    line-height: 1.9 !important;
+    word-break: keep-all !important;
+  }
+}
+
+/* ── 특산물 그리드 ── */
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    padding: 0 !important;
+  }
+  .product-card {
+    padding: 20px 18px !important;
+  }
+  .product-name {
+    font-size: 1.15rem !important;
+  }
+  .product-desc {
+    font-size: .95rem !important;
+    line-height: 1.8 !important;
+  }
+  .product-emoji {
+    font-size: 2rem !important;
+  }
+}
+
+/* ── 캘린더 섹션 ── */
+@media (max-width: 768px) {
+  .calendar-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+    padding: 0 !important;
+  }
+  .cal-grid {
+    width: 100% !important;
+  }
+  .cal-header span,
+  .cal-day {
+    font-size: .9rem !important;
+    min-height: 40px !important;
+  }
+  .cal-title {
+    font-size: 1.1rem !important;
+  }
+  .cal-nav-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    font-size: 1rem !important;
+  }
+  .market-info-list {
+    width: 100% !important;
+  }
+  .info-row {
+    padding: 14px 12px !important;
+    gap: 12px !important;
+  }
+  .info-icon {
+    font-size: 1.5rem !important;
+    min-width: 36px !important;
+  }
+  .info-label {
+    font-size: .78rem !important;
+  }
+  .info-val {
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+  }
+  .market-day-chips {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+}
+
+/* ── 뉴스 섹션 ── */
+@media (max-width: 768px) {
+  .news-section {
+    padding: 60px 20px !important;
+    overflow: hidden !important;
+  }
+  .news-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .news-category-tabs {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    overflow-x: visible !important;
+  }
+  .news-tab {
+    font-size: .88rem !important;
+    padding: 8px 16px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ── 공지사항 ── */
+@media (max-width: 768px) {
+  .notice-section {
+    padding: 60px 20px !important;
+  }
+  .notice-list {
+    width: 100% !important;
+  }
+  .notice-item {
+    padding: 16px 12px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .notice-title {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    word-break: keep-all !important;
+  }
+  .notice-date {
+    font-size: .82rem !important;
+  }
+}
+
+/* ── 상인 소개 ── */
+@media (max-width: 768px) {
+  .merchant-section {
+    padding: 60px 20px !important;
+  }
+  .merchant-pub-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+  }
+}
+@media (max-width: 480px) {
+  .merchant-pub-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 방문 예약 ── */
+@media (max-width: 900px) {
+  .reserve-section {
+    padding: 60px 20px !important;
+    overflow: hidden !important;
+  }
+  .reserve-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+  }
+  .reserve-form,
+  .reserve-info {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .rform-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  .rform-group label {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+  }
+  .rform-group input,
+  .rform-group textarea {
+    font-size: 1rem !important;
+    padding: 14px 14px !important;
+    min-height: 50px !important;
+  }
+  .rform-group textarea {
+    min-height: 110px !important;
+  }
+  .reserve-btn {
+    font-size: 1.05rem !important;
+    padding: 16px !important;
+    min-height: 54px !important;
+    letter-spacing: .1em !important;
+  }
+  .rinfo-card {
+    padding: 14px 16px !important;
+    gap: 12px !important;
+  }
+  .rinfo-label {
+    font-size: .82rem !important;
+  }
+  .rinfo-val {
+    font-size: 1rem !important;
+  }
+  .rinfo-note {
+    font-size: .9rem !important;
+    line-height: 1.85 !important;
+    word-break: keep-all !important;
+  }
+}
+
+/* ── 오시는 길 ── */
+@media (max-width: 768px) {
+  .access {
+    padding: 60px 20px !important;
+    overflow: hidden !important;
+  }
+  .access-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+  .access-card {
+    padding: 18px 16px !important;
+    width: 100% !important;
+  }
+  .access-card h3 {
+    font-size: 1.05rem !important;
+    margin-bottom: 10px !important;
+  }
+  .access-card p {
+    font-size: .95rem !important;
+    line-height: 1.85 !important;
+    word-break: keep-all !important;
+  }
+
+  /* 지도 영역 */
+  .access [style*="height:420px"],
+  .access div[style*="420px"] {
+    height: 280px !important;
+  }
+
+  /* 주소 + 카카오맵 버튼 */
+  .access [style*="display:flex"][style*="align-items:center"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+  .access [style*="display:flex"][style*="align-items:center"] a {
+    margin-left: 0 !important;
+    font-size: .9rem !important;
+    padding: 10px 22px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+/* ── 연락처 바 ── */
+.contact-bar {
+  overflow: hidden !important;
+  flex-wrap: wrap !important;
+}
+@media (max-width: 768px) {
+  .contact-bar {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0 !important;
+  }
+  .contact-bar > div {
+    padding: 14px 16px !important;
+    border-right: 1px solid rgba(212,146,14,.15) !important;
+    border-bottom: 1px solid rgba(212,146,14,.15) !important;
+  }
+  .contact-bar > div:nth-child(even) {
+    border-right: none !important;
+  }
+  .ct-label {
+    font-size: .75rem !important;
+  }
+  .ct-val {
+    font-size: .95rem !important;
+  }
+}
+
+/* ── 푸터 ── */
+@media (max-width: 768px) {
+  footer {
+    padding: 40px 20px !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+  }
+  .footer-brand {
+    font-size: 1.3rem !important;
+  }
+  .footer-sub {
+    font-size: .88rem !important;
+    line-height: 1.9 !important;
+  }
+  .footer-copy {
+    font-size: .78rem !important;
+  }
+  .footer-links {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 12px 16px !important;
+    width: 100% !important;
+  }
+  .footer-links a {
+    font-size: .9rem !important;
+    padding: 4px 0 !important;
+    min-height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+/* ── 팝업 ── */
+@media (max-width: 768px) {
+  #sitePopupBox {
+    width: calc(100vw - 32px) !important;
+    max-width: 100% !important;
+    margin: 16px !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+  }
+  .popup-btn-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 16px !important;
+  }
+  .popup-btn {
+    width: 100% !important;
+    min-height: 48px !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* ── 섹션 공통 어르신 가독성 ── */
+@media (max-width: 768px) {
+  .section-tag {
+    font-size: .78rem !important;
+    letter-spacing: .22em !important;
+    padding: 6px 16px !important;
+    margin-bottom: 16px !important;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
+    line-height: 1.35 !important;
+    word-break: keep-all !important;
+    margin-bottom: 16px !important;
+  }
+  .section-desc {
+    font-size: .97rem !important;
+    line-height: 1.95 !important;
+    word-break: keep-all !important;
+  }
+  /* 관리자 버튼 더 크게 */
+  .admin-gear {
+    font-size: 1.5rem !important;
+    width: 50px !important;
+    height: 50px !important;
+  }
+  /* divider 여백 */
+  .divider {
+    margin: 0 20px !important;
+  }
+}
+
+/* ── 전화번호 탭 링크 변환 ── */
+.tel-link {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tel-link:hover {
+  text-decoration: underline;
+  color: var(--gold, #D4920E);
+}
+</style>
 <style>
 .hero-sub2{font-family:'Nanum Myeongjo',serif;font-size:clamp(1.1rem,2.8vw,1.8rem);color:var(--gold);letter-spacing:.18em;font-weight:800;margin-top:-28px;margin-bottom:40px;animation:fadeUp .8s .75s ease both;display:inline-block}
 .hero-sub2::before,.hero-sub2::after{content:'—';color:rgba(212,146,14,.4);margin:0 12px;font-weight:400;letter-spacing:0}
@@ -104,14 +678,18 @@
 
 <nav>
   <a href="#" class="nav-logo">횡성전통시장<span>HOENGSEONG TRADITIONAL MARKET</span></a>
-  <div class="nav-links">
-    <a href="#about">시장 소개</a>
-    <a href="#specialties">특산물</a>
-    <a href="#calendar">장날 캘린더</a>
-    <a href="#news">뉴스</a>
-    <a href="#notices">공지사항</a>
-    <a href="#merchants">상인 소개</a>
-    <a href="#reserve">방문 예약</a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-links" id="navLinks">
+    <button class="nav-close-btn" id="navClose" aria-label="메뉴 닫기">✕</button>
+    <a href="#about" onclick="closeNav()">시장 소개</a>
+    <a href="#specialties" onclick="closeNav()">특산물</a>
+    <a href="#calendar" onclick="closeNav()">장날 캘린더</a>
+    <a href="#news" onclick="closeNav()">뉴스</a>
+    <a href="#notices" onclick="closeNav()">공지사항</a>
+    <a href="#merchants" onclick="closeNav()">상인 소개</a>
+    <a href="#reserve" onclick="closeNav()">방문 예약</a>
   </div>
 </nav>
 
@@ -415,7 +993,7 @@
       <div class="info-row"><div class="info-icon">📅</div><div class="info-content"><div class="info-label">장날 주기</div><div class="info-val">매월 1·6·11·16·21·26일<br>끝자리 1, 6이면 장날!</div></div></div>
       <div class="info-row"><div class="info-icon">🕐</div><div class="info-content"><div class="info-label">운영 시간</div><div class="info-val">오전 7:00 — 오후 6:00<br>상설시장은 매일 운영</div></div></div>
       <div class="info-row"><div class="info-icon">📍</div><div class="info-content"><div class="info-label">위치</div><div class="info-val">강원특별자치도 횡성군<br>횡성읍 삼일로 4-2</div></div></div>
-      <div class="info-row"><div class="info-icon">📞</div><div class="info-content"><div class="info-label">대표 전화</div><div class="info-val">010-9480-0050</div></div></div>
+      <div class="info-row"><div class="info-icon">📞</div><div class="info-content"><div class="info-label">대표 전화</div><div class="info-val"><a href="tel:01094800050" class="tel-link">010-9480-0050</a></div></div></div>
       <div class="info-row"><div class="info-icon">🚗</div><div class="info-content"><div class="info-label">서울에서 접근</div><div class="info-val">서울춘천고속도로 → 횡성IC<br>약 1시간 30분 소요</div></div></div>
       <div class="info-row"><div class="info-icon">🅿️</div><div class="info-content"><div class="info-label">주차 안내</div><div class="info-val">공영주차장 이용 (유료)<br>30분당 600원 (2시간까지)</div></div></div>
     </div>
@@ -466,7 +1044,7 @@
     </div>
     <div class="reserve-info">
       <div class="rinfo-card"><div class="rinfo-icon">👥</div><div><div class="rinfo-label">단체 기준</div><div class="rinfo-val">10인 이상 단체 예약 가능</div></div></div>
-      <div class="rinfo-card"><div class="rinfo-icon">📞</div><div><div class="rinfo-label">문의 전화</div><div class="rinfo-val">010-9480-0050</div></div></div>
+      <div class="rinfo-card"><div class="rinfo-icon">📞</div><div><div class="rinfo-label">문의 전화</div><div class="rinfo-val"><a href="tel:01094800050" class="tel-link">010-9480-0050</a></div></div></div>
       <div class="rinfo-card"><div class="rinfo-icon">⏰</div><div><div class="rinfo-label">처리 시간</div><div class="rinfo-val">신청 후 1~2 영업일 내 연락</div></div></div>
       <div class="rinfo-note">※ 장날(끝자리 1·6일)에 방문하시면 활기찬 오일장 문화를 직접 체험하실 수 있습니다.<br>※ 한우 시식, 전통 음식 체험 등 별도 프로그램 문의는 전화로 연락 주세요.</div>
     </div>
@@ -481,7 +1059,7 @@
     <div class="access-card"><h3>🚌 버스</h3><p>동서울터미널 → 횡성 1일 10여 회<br>약 1시간 40분 소요<br><br>삼일광장(81-033) 하차<br>만세공원(81-026) 하차</p></div>
     <div class="access-card"><h3>🚆 기차 + 버스</h3><p>청량리 → KTX → 만종역 약 40분<br>만종역에서 횡성 버스 환승 약 20분<br><br><strong>총 소요:</strong> 약 1시간</p></div>
   </div>
-  <div style="margin:32px 0 0">
+  <div style="margin:32px 0 0;max-width:100%;overflow:hidden">
     <div style="width:100%;height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(212,146,14,.35);box-shadow:0 4px 32px rgba(0,0,0,.35)">
       <iframe
         src="https://map.kakao.com/link/map/%ED%9A%A1%EC%84%B1%EC%A0%84%ED%86%B5%EC%8B%9C%EC%9E%A5,37.4912,127.9851"
@@ -504,7 +1082,7 @@
     </div>
   </div>
   <div class="contact-bar">
-    <div><div class="ct-label">대표 전화</div><div class="ct-val">010-9480-0050</div></div>
+    <div><div class="ct-label">대표 전화</div><div class="ct-val"><a href="tel:01094800050" class="tel-link">010-9480-0050</a></div></div>
     <div><div class="ct-label">주차 요금</div><div class="ct-val">30분 600원 (2시간 기준)</div></div>
     <div><div class="ct-label">5일장</div><div class="ct-val">매월 1·6일 끝자리</div></div>
     <div><div class="ct-label">운영 시간</div><div class="ct-val">07:00 — 18:00</div></div>
@@ -514,7 +1092,7 @@
 <footer>
   <div>
     <div class="footer-brand">횡성전통시장</div>
-    <p class="footer-sub">우하하 횡성한우시장<br>강원특별자치도 횡성군 횡성읍 삼일로 4-2<br>대표전화 010-9480-0050</p>
+    <p class="footer-sub">우하하 횡성한우시장<br>강원특별자치도 횡성군 횡성읍 삼일로 4-2<br>대표전화 <a href="tel:01094800050" class="tel-link">010-9480-0050</a></p>
     <p class="footer-copy">© 2026 횡성전통시장 상인회. All rights reserved.</p>
   </div>
   <div class="footer-links">
@@ -672,6 +1250,32 @@
   document.readyState==='loading'
     ? document.addEventListener('DOMContentLoaded',init)
     : init();
+})();
+</script>
+<script>
+/* ── 햄버거 메뉴 ── */
+(function(){
+  var btn   = document.getElementById('navHamburger');
+  var links = document.getElementById('navLinks');
+  var close = document.getElementById('navClose');
+  if(!btn || !links) return;
+
+  function openNav(){
+    links.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  window.closeNav = function(){
+    links.classList.remove('open');
+    btn.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  };
+  btn.addEventListener('click', openNav);
+  if(close) close.addEventListener('click', closeNav);
+  // 배경 클릭 시 닫기
+  links.addEventListener('click', function(e){
+    if(e.target === links) closeNav();
+  });
 })();
 </script>
 </body>
