@@ -174,7 +174,7 @@ section { padding: 100px 48px; }
 /* ── ABOUT ── */
 .about { background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
 .about-frame {
-  width: 100%; padding-top: 100%;
+  width: 100%; aspect-ratio: 1 / 1;
   background: var(--parchment); position: relative; overflow: hidden;
   border: 3px solid var(--ochre);
 }
