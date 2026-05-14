@@ -542,6 +542,20 @@ footer { background: var(--ink); padding: 48px; display: flex; align-items: flex
   .faq-a { padding: 0 20px; }
   .faq-a.open { padding: 14px 20px 20px; }
 }
+/* ── 전화번호 링크 (핑크) ── */
+a.tel-link,
+a.tel-link:link,
+a.tel-link:visited {
+  color: #D4527A !important;
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.tel-link:hover,
+a.tel-link:active {
+  color: #E0688A !important;
+  text-decoration: underline;
+}
+
 .admin-gear {
   position: fixed; bottom: 28px; right: 28px; z-index: 999;
   width: 44px; height: 44px;
