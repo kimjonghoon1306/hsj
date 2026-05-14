@@ -507,7 +507,41 @@ footer { background: var(--ink); padding: 48px; display: flex; align-items: flex
   .merchant-pub-grid { grid-template-columns: 1fr; }
 }
 
-/* ── 관리자 톱니바퀴 ── */
+/* ── 자주 묻는 질문 ── */
+.faq-section { background: var(--ink); }
+.faq-section .section-title { color: var(--cream); }
+.faq-section .section-desc  { color: rgba(247,237,216,0.55); }
+.faq-list { max-width: 780px; margin: 48px auto 0; display: flex; flex-direction: column; gap: 2px; }
+.faq-item { background: #2A1A0E; overflow: hidden; }
+.faq-q {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 28px; text-align: left; gap: 16px;
+  font-family: 'Nanum Myeongjo', serif; font-size: 1.05rem; font-weight: 800;
+  color: var(--cream); transition: color 0.2s;
+}
+.faq-q:hover { color: var(--gold); }
+.faq-arrow { font-size: 1.3rem; color: var(--ochre); flex-shrink: 0; transition: transform 0.3s; }
+.faq-q.open .faq-arrow { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  font-size: 0.9rem; color: rgba(247,237,216,0.65);
+  line-height: 1.9; padding: 0 28px;
+  border-top: 0px solid rgba(212,146,14,.15);
+}
+.faq-a.open {
+  max-height: 300px;
+  padding: 18px 28px 24px;
+  border-top: 1px solid rgba(212,146,14,.12);
+}
+.faq-a strong { color: var(--gold); }
+@media (max-width: 768px) {
+  .faq-list { margin-top: 32px; }
+  .faq-q { padding: 18px 20px; font-size: 0.95rem; }
+  .faq-a { padding: 0 20px; }
+  .faq-a.open { padding: 14px 20px 20px; }
+}
 .admin-gear {
   position: fixed; bottom: 28px; right: 28px; z-index: 999;
   width: 44px; height: 44px;
