@@ -205,15 +205,18 @@ function renderPopupList(){
 
 function openPopupModal(id){
   popupEditId=id||null; popupImageUrl='';
-  const preview=document.getElementById('pmImagePreview');
   const status=document.getElementById('pmUploadStatus');
-  if(preview)preview.innerHTML='';
   if(status)status.innerHTML='';
   document.getElementById('pmId').value='';
   document.getElementById('pmTitle').value='';
   document.getElementById('pmContent').value='';
   document.getElementById('pmImageFile').value='';
   document.getElementById('pmMtitle').textContent=id?'팝업 수정':'새 팝업 만들기';
+  // 업로드 안내 플레이스홀더 복원
+  document.getElementById('pmImagePreview').innerHTML=`
+    <div style="font-size:2.5rem;margin-bottom:10px;">📷</div>
+    <div style="font-size:0.85rem;color:rgba(30,18,8,0.5);font-weight:500;">클릭하여 이미지 업로드</div>
+    <div style="font-size:0.75rem;color:rgba(30,18,8,0.3);margin-top:4px;">JPG, PNG, GIF 지원</div>`;
 
   if(id){
     const p=Store.Popups.getAll().find(x=>x.id===id); if(!p)return;
@@ -221,7 +224,9 @@ function openPopupModal(id){
     document.getElementById('pmTitle').value=p.title||'';
     document.getElementById('pmContent').value=p.content||'';
     popupImageUrl=p.imageUrl||'';
-    if(p.imageUrl&&preview) preview.innerHTML=`<img src="${p.imageUrl}" style="width:100%;max-height:160px;object-fit:cover;border-radius:4px;">`;
+    if(p.imageUrl){
+      document.getElementById('pmImagePreview').innerHTML=`<img src="${p.imageUrl}" style="width:100%;max-height:160px;object-fit:cover;border-radius:4px;">`;
+    }
   }
   openModal('popupModal');
 }
