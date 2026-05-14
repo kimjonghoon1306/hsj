@@ -49,6 +49,14 @@ function updateCountdown() {
   if (clockEl) clockEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   if (dateEl)  dateEl.textContent  = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${DOW[now.getDay()]}요일`;
 
+  // 히어로 하단 스트립도 동기화
+  const stripDday = document.getElementById('heroStripDday');
+  const stripMsg  = document.getElementById('heroStripMsg');
+  const stripClk  = document.getElementById('heroStripClock');
+  const stripDate = document.getElementById('heroStripDate');
+  if (stripClk)  stripClk.textContent  = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  if (stripDate) stripDate.textContent = `${now.getMonth()+1}월 ${now.getDate()}일 ${DOW[now.getDay()]}요일`;
+
   const todayEl = document.getElementById('cntToday');
   const downEl  = document.getElementById('cntDown');
   if (!todayEl || !downEl) return;
@@ -57,7 +65,9 @@ function updateCountdown() {
   if (isMarketDay(now.getDate())) {
     todayEl.style.display = 'flex';
     downEl.style.display  = 'none';
-    markNextOnCalendar(now);   // 오늘 날짜를 캘린더에 표시
+    if (stripDday) stripDday.textContent = 'D-DAY';
+    if (stripMsg)  stripMsg.textContent  = '🎉 오늘이 장날! 지금 바로 횡성전통시장으로 오세요';
+    markNextOnCalendar(now);
     return;
   }
 
@@ -81,11 +91,14 @@ function updateCountdown() {
   const ddayEl = document.getElementById('cntDday');
   const strEl  = document.getElementById('cntNextStr');
   if (ddayEl) ddayEl.textContent = `D-${found.diff}`;
-  if (strEl) {
+  if (strEl || stripDday || stripMsg) {
     const m   = found.date.getMonth() + 1;
     const d   = found.date.getDate();
     const dow = DOW[found.date.getDay()];
-    strEl.textContent = `${m}월 ${d}일 (${dow}) 장날`;
+    const dateStr = `${m}월 ${d}일 (${dow}) 장날`;
+    if (strEl)     strEl.textContent     = dateStr;
+    if (stripDday) stripDday.textContent = `D-${found.diff}`;
+    if (stripMsg)  stripMsg.textContent  = `${dateStr}까지 ${found.diff}일 남았습니다`;
   }
 
   // 실시간 카운트다운
