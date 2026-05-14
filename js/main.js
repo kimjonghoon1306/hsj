@@ -43,26 +43,27 @@ function updateCountdown() {
   const pad = n => String(n).padStart(2, '0');
   const DOW = ['일','월','화','수','목','금','토'];
 
-  // 현재 시각 업데이트
+  // 현재 시각
   const clockEl = document.getElementById('liveClock');
   const dateEl  = document.getElementById('liveDate');
   if (clockEl) clockEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   if (dateEl)  dateEl.textContent  = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${DOW[now.getDay()]}요일`;
 
-  const todayEl   = document.getElementById('cntToday');
-  const downEl    = document.getElementById('cntDown');
+  const todayEl = document.getElementById('cntToday');
+  const downEl  = document.getElementById('cntDown');
   if (!todayEl || !downEl) return;
 
   // 오늘이 장날?
   if (isMarketDay(now.getDate())) {
     todayEl.style.display = 'flex';
     downEl.style.display  = 'none';
+    markNextOnCalendar(now);   // 오늘 날짜를 캘린더에 표시
     return;
   }
 
   // 다음 장날 찾기
-  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const check    = new Date(midnight);
+  const base  = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const check = new Date(base);
   let found = null;
   for (let i = 1; i <= 15; i++) {
     check.setDate(check.getDate() + 1);
@@ -76,7 +77,7 @@ function updateCountdown() {
   todayEl.style.display = 'none';
   downEl.style.display  = 'flex';
 
-  // D-day 표시
+  // D-day / 날짜 표시
   const ddayEl = document.getElementById('cntDday');
   const strEl  = document.getElementById('cntNextStr');
   if (ddayEl) ddayEl.textContent = `D-${found.diff}`;
@@ -87,8 +88,8 @@ function updateCountdown() {
     strEl.textContent = `${m}월 ${d}일 (${dow}) 장날`;
   }
 
-  // 실시간 카운트다운 (다음 장날 자정까지)
-  const remaining = found.date - now;  // ms
+  // 실시간 카운트다운
+  const remaining = found.date - now;
   const totalSec  = Math.max(0, Math.floor(remaining / 1000));
   const days  = Math.floor(totalSec / 86400);
   const hours = Math.floor((totalSec % 86400) / 3600);
@@ -103,6 +104,24 @@ function updateCountdown() {
   if (hEl) hEl.textContent = pad(hours);
   if (mEl) mEl.textContent = pad(mins);
   if (sEl) sEl.textContent = pad(secs);
+
+  // 캘린더 연동: 다음 장날 셀 강조
+  markNextOnCalendar(found.date);
+}
+
+// ── 캘린더 다음 장날 셀 강조 ──────────────────────
+function markNextOnCalendar(targetDate) {
+  document.querySelectorAll('.cal-day.next-market').forEach(el => el.classList.remove('next-market'));
+  if (!targetDate) return;
+  // 현재 캘린더가 같은 월을 보여주고 있을 때만
+  if (targetDate.getFullYear() === currentYear && targetDate.getMonth() === currentMonth) {
+    const tDay = targetDate.getDate();
+    document.querySelectorAll('#calGrid .cal-day.market').forEach(cell => {
+      if (parseInt(cell.textContent.trim()) === tDay) {
+        cell.classList.add('next-market');
+      }
+    });
+  }
 }
 
 function initDday() {
@@ -159,6 +178,19 @@ function buildCalendar() {
 
   // 장날 칩
   renderMarketChips(marketDays, todayY, todayM, todayD);
+
+  // 카운트다운과 연동: 다음 장날 셀 강조
+  const now2 = new Date();
+  const base2 = new Date(now2.getFullYear(), now2.getMonth(), now2.getDate());
+  if (isMarketDay(base2.getDate())) {
+    markNextOnCalendar(base2);
+  } else {
+    const chk = new Date(base2);
+    for (let i = 1; i <= 15; i++) {
+      chk.setDate(chk.getDate() + 1);
+      if (isMarketDay(chk.getDate())) { markNextOnCalendar(new Date(chk)); break; }
+    }
+  }
 }
 
 function renderMarketChips(days, tY, tM, tD) {
