@@ -6,6 +6,7 @@
 <title>횡성전통시장 — 우하하 횡성한우시장</title>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style id="mobile-fix">
 /* ════════════════════════════════════════════
    모바일 최적화 · 어르신 친화 CSS
@@ -28,15 +29,17 @@ body {
 }
 
 /* ── 네비게이션 모바일 ── */
-nav {
-  padding: 0 16px !important;
-  position: relative;
-}
-.nav-logo {
-  font-size: clamp(1rem, 4vw, 1.2rem) !important;
-}
-.nav-logo span {
-  display: none !important;
+@media (max-width: 768px) {
+  nav {
+    padding: 0 16px !important;
+    position: relative;
+  }
+  .nav-logo {
+    font-size: clamp(1rem, 4vw, 1.2rem) !important;
+  }
+  .nav-logo span {
+    display: none !important;
+  }
 }
 
 /* 모바일 햄버거 버튼 */
@@ -66,7 +69,12 @@ nav {
   .nav-hamburger { display: flex; }
 
   .nav-links {
-    display: none !important;
+    display: none !important; /* 모바일에서 데스크탑 링크 숨김 */
+  }
+
+  /* ── 모바일 전체화면 오버레이 (nav 밖에 있어야 backdrop-filter 버그 없음) ── */
+  .nav-mobile-overlay {
+    display: none;
     position: fixed !important;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(6,4,2,0.97) !important;
@@ -78,18 +86,21 @@ nav {
     padding: 60px 32px 40px !important;
     width: 100% !important;
   }
-  .nav-links.open {
+  .nav-mobile-overlay.open {
     display: flex !important;
   }
-  .nav-links a {
+  .nav-mobile-overlay a {
     font-size: 1.35rem !important;
     padding: 16px 0 !important;
     letter-spacing: .12em !important;
     width: 100% !important;
     text-align: center !important;
     border-bottom: 1px solid rgba(212,146,14,.15) !important;
+    color: var(--cream, #F7EDD8) !important;
+    text-decoration: none !important;
+    display: block !important;
   }
-  .nav-links a:last-child {
+  .nav-mobile-overlay a:last-of-type {
     border-bottom: none !important;
   }
   /* 닫기 버튼 */
@@ -436,19 +447,15 @@ nav {
     word-break: keep-all !important;
   }
 
-  /* 지도 영역 */
-  .access [style*="height:420px"],
-  .access div[style*="420px"] {
-    height: 280px !important;
-  }
+  /* 지도 영역 - JS로 반응형 처리 */
 
   /* 주소 + 카카오맵 버튼 */
-  .access [style*="display:flex"][style*="align-items:center"] {
+  .map-address-row {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 10px !important;
   }
-  .access [style*="display:flex"][style*="align-items:center"] a {
+  .map-address-row a {
     margin-left: 0 !important;
     font-size: .9rem !important;
     padding: 10px 22px !important;
@@ -678,20 +685,30 @@ nav {
 
 <nav>
   <a href="#" class="nav-logo">횡성전통시장<span>HOENGSEONG TRADITIONAL MARKET</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">시장 소개</a>
+    <a href="#specialties">특산물</a>
+    <a href="#calendar">장날 캘린더</a>
+    <a href="#news">뉴스</a>
+    <a href="#notices">공지사항</a>
+    <a href="#merchants">상인 소개</a>
+    <a href="#reserve">방문 예약</a>
+  </div>
   <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
-  <div class="nav-links" id="navLinks">
-    <button class="nav-close-btn" id="navClose" aria-label="메뉴 닫기">✕</button>
-    <a href="#about" onclick="closeNav()">시장 소개</a>
-    <a href="#specialties" onclick="closeNav()">특산물</a>
-    <a href="#calendar" onclick="closeNav()">장날 캘린더</a>
-    <a href="#news" onclick="closeNav()">뉴스</a>
-    <a href="#notices" onclick="closeNav()">공지사항</a>
-    <a href="#merchants" onclick="closeNav()">상인 소개</a>
-    <a href="#reserve" onclick="closeNav()">방문 예약</a>
-  </div>
 </nav>
+<!-- ══ 모바일 전체화면 메뉴 오버레이 (nav 밖 - backdrop-filter 버그 우회) ══ -->
+<div class="nav-mobile-overlay" id="navMobileOverlay">
+  <button class="nav-close-btn" id="navClose" aria-label="메뉴 닫기">✕</button>
+  <a href="#about" onclick="closeNav()">시장 소개</a>
+  <a href="#specialties" onclick="closeNav()">특산물</a>
+  <a href="#calendar" onclick="closeNav()">장날 캘린더</a>
+  <a href="#news" onclick="closeNav()">뉴스</a>
+  <a href="#notices" onclick="closeNav()">공지사항</a>
+  <a href="#merchants" onclick="closeNav()">상인 소개</a>
+  <a href="#reserve" onclick="closeNav()">방문 예약</a>
+</div>
 
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
@@ -1051,6 +1068,52 @@ nav {
   </div>
 </section>
 
+<div class="divider"></div>
+
+<section class="faq-section fade-in" id="faq">
+  <div class="section-tag">자주 묻는 질문</div>
+  <h2 class="section-title">궁금한 것이<br>있으신가요?</h2>
+  <p class="section-desc">횡성전통시장 방문 전 자주 묻는 질문들을 모았습니다.</p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span>장날은 언제인가요?</span><span class="faq-arrow">＋</span>
+      </button>
+      <div class="faq-a">매월 끝자리가 <strong>1 또는 6인 날</strong> — 즉 1·6·11·16·21·26일에 5일장이 열립니다. 상설시장은 매일 운영됩니다. 장날 일정은 위의 <a href="#calendar" style="color:var(--ochre);text-decoration:none;font-weight:600">장날 캘린더</a>에서 확인하세요.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span>운영 시간은 어떻게 되나요?</span><span class="faq-arrow">＋</span>
+      </button>
+      <div class="faq-a">5일장 기준 <strong>오전 7시 — 오후 6시</strong>까지 운영됩니다. 상설시장 점포는 상인에 따라 운영 시간이 다소 다를 수 있습니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span>주차는 어떻게 하나요?</span><span class="faq-arrow">＋</span>
+      </button>
+      <div class="faq-a">시장 인근 <strong>공영주차장</strong>을 이용하시면 됩니다. 요금은 30분당 600원이며 2시간 기준입니다. 장날에는 방문객이 많으므로 가급적 대중교통을 이용하시길 권장합니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span>서울에서 얼마나 걸리나요?</span><span class="faq-arrow">＋</span>
+      </button>
+      <div class="faq-a"><strong>자가용</strong>: 서울춘천고속도로 → 횡성IC 경유, 약 1시간 30분 소요<br><strong>기차+버스</strong>: 청량리 → KTX 만종역(40분) → 버스 환승 20분, 총 약 1시간<br><strong>버스</strong>: 동서울터미널 → 횡성 직행, 약 1시간 40분</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span>단체 방문 시 사전 예약이 필요한가요?</span><span class="faq-arrow">＋</span>
+      </button>
+      <div class="faq-a"><strong>10인 이상 단체</strong>는 원활한 안내를 위해 사전 예약을 권장합니다. 위 <a href="#reserve" style="color:var(--ochre);text-decoration:none;font-weight:600">방문 예약</a> 양식을 이용하시거나 전화(<a href="tel:01094800050" class="tel-link" style="color:var(--ochre);font-weight:600">010-9480-0050</a>)로 문의하세요.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        <span>꼭 맛봐야 할 먹거리는 무엇인가요?</span><span class="faq-arrow">＋</span>
+      </button>
+      <div class="faq-a">대표 먹거리로는 <strong>횡성 한우</strong>, <strong>더덕부침</strong>, <strong>안흥찐빵</strong>, <strong>메밀총떡</strong>, <strong>뻥튀기</strong>가 있습니다. 장날에는 노점도 많이 열리므로 다양한 전통 음식을 맛보실 수 있습니다.</div>
+    </div>
+  </div>
+</section>
+
 <section class="access fade-in" id="access">
   <div class="section-tag">오시는 길</div>
   <h2 class="section-title">횡성전통시장<br>찾아오기</h2>
@@ -1060,20 +1123,53 @@ nav {
     <div class="access-card"><h3>🚆 기차 + 버스</h3><p>청량리 → KTX → 만종역 약 40분<br>만종역에서 횡성 버스 환승 약 20분<br><br><strong>총 소요:</strong> 약 1시간</p></div>
   </div>
   <div style="margin:32px 0 0;max-width:100%;overflow:hidden">
-    <div style="width:100%;height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(212,146,14,.35);box-shadow:0 4px 32px rgba(0,0,0,.35)">
-      <iframe
-        src="https://map.kakao.com/link/map/%ED%9A%A1%EC%84%B1%EC%A0%84%ED%86%B5%EC%8B%9C%EC%9E%A5,37.4912,127.9851"
-        style="width:100%;height:100%;border:none"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="횡성전통시장 위치"
-        allowfullscreen=""
-      ></iframe>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:0 4px;flex-wrap:wrap">
+    <div id="leafletMap" style="width:100%;height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(212,146,14,.35);box-shadow:0 4px 32px rgba(0,0,0,.35)"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script>
+    (function(){
+      if(typeof L === 'undefined') return;
+      var map = L.map('leafletMap', {
+        center: [37.4912, 127.9851],
+        zoom: 16,
+        scrollWheelZoom: false,
+        zoomControl: true
+      });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" style="color:#D4920E">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" style="color:#D4920E">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+      var goldIcon = L.divIcon({
+        html: '<div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:26px solid #D4920E;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))"></div><div style="width:10px;height:10px;background:#D4920E;border-radius:50%;margin:-3px auto 0;box-shadow:0 0 0 3px rgba(212,146,14,.3)"></div>',
+        iconSize: [28, 36],
+        iconAnchor: [14, 36],
+        popupAnchor: [0, -38],
+        className: ''
+      });
+      var marker = L.marker([37.4912, 127.9851], {icon: goldIcon}).addTo(map);
+      marker.bindPopup(
+        '<div style="font-family:\'Nanum Myeongjo\',serif;text-align:center;padding:6px 10px;min-width:160px">' +
+        '<b style="font-size:1rem;color:#3D2314;display:block;margin-bottom:4px">횡성전통시장</b>' +
+        '<span style="font-size:.78rem;color:#B8751A;display:block;margin-bottom:4px">우하하 횡성한우시장</span>' +
+        '<span style="font-size:.74rem;color:#666;display:block">강원 횡성읍 삼일로 4-2</span>' +
+        '</div>',
+        { maxWidth: 220 }
+      ).openPopup();
+      /* 모바일 지도 높이 반응형 */
+      function resizeMap(){
+        var el = document.getElementById('leafletMap');
+        if(!el) return;
+        el.style.height = window.innerWidth <= 768 ? '280px' : '420px';
+        map.invalidateSize();
+      }
+      window.addEventListener('resize', resizeMap);
+      resizeMap();
+    })();
+    </script>
+    <div class="map-address-row" style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:0 4px;flex-wrap:wrap">
       <span style="font-size:1.2rem">📍</span>
-      <span style="font-size:.95rem;color:#F7EDD8;font-weight:500;letter-spacing:.04em">강원특별자치도 횡성군 횡성읍 삼일로 4-2</span>
-      <span style="font-size:.8rem;color:rgba(212,146,14,.75);font-weight:400">우하하 횡성한우시장</span>
+      <span style="font-size:.95rem;color:var(--ink, #1E1208);font-weight:500;letter-spacing:.04em">강원특별자치도 횡성군 횡성읍 삼일로 4-2</span>
+      <span style="font-size:.8rem;color:var(--ochre, #B8751A);font-weight:600">우하하 횡성한우시장</span>
       <a href="https://map.kakao.com/link/map/횡성전통시장,37.4912,127.9851" target="_blank" rel="noopener"
          style="margin-left:auto;font-size:.78rem;letter-spacing:.12em;color:#D4920E;text-decoration:none;border:1px solid rgba(212,146,14,.5);padding:8px 20px;border-radius:20px;white-space:nowrap;font-weight:600;background:rgba(212,146,14,.08);transition:background .2s"
          onmouseover="this.style.background='rgba(212,146,14,.2)'" onmouseout="this.style.background='rgba(212,146,14,.08)'">
@@ -1123,6 +1219,24 @@ nav {
 <script src="js/main.js"></script>
 <script src="js/news.js"></script>
 <script src="js/public.js"></script>
+<script>
+/* ── FAQ 토글 ── */
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var ans  = item.querySelector('.faq-a');
+  var isOpen = btn.classList.contains('open');
+  /* 모두 닫기 */
+  document.querySelectorAll('.faq-q.open').forEach(function(q){
+    q.classList.remove('open');
+    q.closest('.faq-item').querySelector('.faq-a').classList.remove('open');
+  });
+  /* 현재 항목 토글 */
+  if(!isOpen){
+    btn.classList.add('open');
+    ans.classList.add('open');
+  }
+}
+</script>
 <script>
 (function(){
   /* ── Cinematic Auto-Timer (4초 간격) ── */
@@ -1255,26 +1369,30 @@ nav {
 <script>
 /* ── 햄버거 메뉴 ── */
 (function(){
-  var btn   = document.getElementById('navHamburger');
-  var links = document.getElementById('navLinks');
-  var close = document.getElementById('navClose');
-  if(!btn || !links) return;
+  var btn     = document.getElementById('navHamburger');
+  var overlay = document.getElementById('navMobileOverlay');
+  var close   = document.getElementById('navClose');
+  if(!btn || !overlay) return;
 
   function openNav(){
-    links.classList.add('open');
+    overlay.classList.add('open');
     btn.setAttribute('aria-expanded','true');
     document.body.style.overflow = 'hidden';
   }
   window.closeNav = function(){
-    links.classList.remove('open');
+    overlay.classList.remove('open');
     btn.setAttribute('aria-expanded','false');
     document.body.style.overflow = '';
   };
   btn.addEventListener('click', openNav);
   if(close) close.addEventListener('click', closeNav);
-  // 배경 클릭 시 닫기
-  links.addEventListener('click', function(e){
-    if(e.target === links) closeNav();
+  /* 오버레이 배경 클릭 시 닫기 */
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeNav();
+  });
+  /* ESC 키 닫기 */
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeNav();
   });
 })();
 </script>
