@@ -57,6 +57,12 @@ function updateCountdown() {
   if (stripClk)  stripClk.textContent  = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   if (stripDate) stripDate.textContent = `${now.getMonth()+1}월 ${now.getDate()}일 ${DOW[now.getDay()]}요일`;
 
+  // 시네마틱 직후 위젯 동기화
+  const hwToday = document.getElementById('hwToday');
+  const hwDown  = document.getElementById('hwDown');
+  const hwClock = document.getElementById('hwClock');
+  if (hwClock) hwClock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
   const todayEl = document.getElementById('cntToday');
   const downEl  = document.getElementById('cntDown');
   if (!todayEl || !downEl) return;
@@ -65,6 +71,8 @@ function updateCountdown() {
   if (isMarketDay(now.getDate())) {
     todayEl.style.display = 'flex';
     downEl.style.display  = 'none';
+    if (hwToday) { hwToday.style.display='flex'; }
+    if (hwDown)  { hwDown.style.display='none'; }
     if (stripDday) stripDday.textContent = 'D-DAY';
     if (stripMsg)  stripMsg.textContent  = '🎉 오늘이 장날! 지금 바로 횡성전통시장으로 오세요';
     markNextOnCalendar(now);
@@ -86,6 +94,8 @@ function updateCountdown() {
 
   todayEl.style.display = 'none';
   downEl.style.display  = 'flex';
+  if (hwToday) hwToday.style.display = 'none';
+  if (hwDown)  hwDown.style.display  = 'flex';
 
   // D-day / 날짜 표시
   const ddayEl = document.getElementById('cntDday');
@@ -99,6 +109,10 @@ function updateCountdown() {
     if (strEl)     strEl.textContent     = dateStr;
     if (stripDday) stripDday.textContent = `D-${found.diff}`;
     if (stripMsg)  stripMsg.textContent  = `${dateStr}까지 ${found.diff}일 남았습니다`;
+    const hwDdayEl = document.getElementById('hwDday');
+    const hwDateEl = document.getElementById('hwDate');
+    if (hwDdayEl) hwDdayEl.textContent = `D-${found.diff}`;
+    if (hwDateEl) hwDateEl.textContent = dateStr;
   }
 
   // 실시간 카운트다운
@@ -117,6 +131,14 @@ function updateCountdown() {
   if (hEl) hEl.textContent = pad(hours);
   if (mEl) mEl.textContent = pad(mins);
   if (sEl) sEl.textContent = pad(secs);
+  const hwDE = document.getElementById('hwD');
+  const hwHE = document.getElementById('hwH');
+  const hwME = document.getElementById('hwM');
+  const hwSE = document.getElementById('hwS');
+  if (hwDE) hwDE.textContent = String(days);
+  if (hwHE) hwHE.textContent = pad(hours);
+  if (hwME) hwME.textContent = pad(mins);
+  if (hwSE) hwSE.textContent = pad(secs);
 
   // 캘린더 연동: 다음 장날 셀 강조
   markNextOnCalendar(found.date);
