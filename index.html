@@ -1097,7 +1097,7 @@ body {
       <button class="faq-q" onclick="toggleFaq(this)">
         <span>서울에서 얼마나 걸리나요?</span><span class="faq-arrow">＋</span>
       </button>
-      <div class="faq-a"><strong>자가용</strong>: 서울춘천고속도로 → 횡성IC 경유, 약 1시간 30분 소요<br><strong>기차+버스</strong>: 청량리 → KTX 만종역(40분) → 버스 환승 20분, 총 약 1시간<br><strong>버스</strong>: 동서울터미널 → 횡성 직행, 약 1시간 40분</div>
+      <div class="faq-a"><strong>자가용</strong>: 서울춘천고속도로 → 횡성IC 경유, 약 1시간 30분 소요<br><strong>KTX</strong>: 청량리 → 횡성역 직행 약 55분 → 택시 10분, 총 약 1시간 10분 (경강선 KTX 횡성역 하차)<br><strong>버스</strong>: 동서울터미널 → 횡성 직행, 약 1시간 40분</div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">
@@ -1120,7 +1120,7 @@ body {
   <div class="access-grid">
     <div class="access-card"><h3>🚗 자가용</h3><p>서울 → 서울춘천고속도로<br>→ 횡성IC → 시내 방면 5분<br><br><strong>소요 시간:</strong> 서울 약 1시간 30분</p></div>
     <div class="access-card"><h3>🚌 버스</h3><p>동서울터미널 → 횡성 1일 10여 회<br>약 1시간 40분 소요<br><br>삼일광장(81-033) 하차<br>만세공원(81-026) 하차</p></div>
-    <div class="access-card"><h3>🚆 기차 + 버스</h3><p>청량리 → KTX → 만종역 약 40분<br>만종역에서 횡성 버스 환승 약 20분<br><br><strong>총 소요:</strong> 약 1시간</p></div>
+    <div class="access-card"><h3>🚆 KTX 직행</h3><p>청량리 → KTX → <strong>횡성역</strong> 약 55분<br>횡성역에서 택시 약 10분 (시장까지)<br><br><strong>총 소요:</strong> 약 1시간 10분<br><small style="color:rgba(30,18,8,.5);font-size:.82rem">※ 경강선 KTX 횡성역 하차</small></p></div>
   </div>
   <div style="margin:32px 0 0;max-width:100%;overflow:hidden">
     <div id="leafletMap" style="width:100%;height:420px;border-radius:16px;overflow:hidden;border:1px solid rgba(212,146,14,.35);box-shadow:0 4px 32px rgba(0,0,0,.35)"></div>
@@ -1134,13 +1134,16 @@ body {
         scrollWheelZoom: false,
         zoomControl: true
       });
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" style="color:#D4920E">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" style="color:#D4920E">CARTO</a>',
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 19
       }).addTo(map);
       var goldIcon = L.divIcon({
-        html: '<div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:26px solid #D4920E;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))"></div><div style="width:10px;height:10px;background:#D4920E;border-radius:50%;margin:-3px auto 0;box-shadow:0 0 0 3px rgba(212,146,14,.3)"></div>',
+        html: '<div style="position:relative;width:36px;height:36px">'
+            + '<div style="position:absolute;inset:0;background:#D4920E;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.45)"></div>'
+            + '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;line-height:1">🏪</div>'
+            + '</div>',
         iconSize: [28, 36],
         iconAnchor: [14, 36],
         popupAnchor: [0, -38],
