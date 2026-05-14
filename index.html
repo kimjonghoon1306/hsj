@@ -155,6 +155,9 @@ body {
 
 /* ── Hero 섹션 ── */
 @media (max-width: 768px) {
+  .hero {
+    min-height: 55vh !important;
+  }
   .hero-content {
     padding: 0 20px !important;
     max-width: 100% !important;
@@ -550,8 +553,10 @@ body {
   .section-tag {
     font-size: .78rem !important;
     letter-spacing: .22em !important;
-    padding: 6px 16px !important;
-    margin-bottom: 16px !important;
+    padding: 6px 0 6px 38px !important;  /* 왼쪽 여백 확보: ::before 라인(30px) 겹침 방지 */
+    margin-bottom: 8px !important;
+  section[id] {
+    scroll-margin-top: 68px;
   }
   .section-title {
     font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
@@ -1132,7 +1137,8 @@ body {
         center: [37.4912, 127.9851],
         zoom: 16,
         scrollWheelZoom: false,
-        zoomControl: true
+        zoomControl: true,
+        attributionControl: false
       });
       L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
