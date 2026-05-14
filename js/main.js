@@ -37,45 +37,77 @@ function calcNextMarket() {
   return null;
 }
 
-// ── 실시간 시계 + D-DAY ─────────────────────────
-function updateClock() {
+// ── 실시간 카운트다운 (시계 + 장날 타이머 통합) ─────
+function updateCountdown() {
   const now = new Date();
   const pad = n => String(n).padStart(2, '0');
-  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-  const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ` +
-    ['일','월','화','수','목','금','토'][now.getDay()] + '요일';
+  const DOW = ['일','월','화','수','목','금','토'];
 
+  // 현재 시각 업데이트
   const clockEl = document.getElementById('liveClock');
-  const dateEl2 = document.getElementById('liveDate');
-  if (clockEl) clockEl.textContent = timeStr;
-  if (dateEl2) dateEl2.textContent = dateStr;
+  const dateEl  = document.getElementById('liveDate');
+  if (clockEl) clockEl.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  if (dateEl)  dateEl.textContent  = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${DOW[now.getDay()]}요일`;
+
+  const todayEl   = document.getElementById('cntToday');
+  const downEl    = document.getElementById('cntDown');
+  if (!todayEl || !downEl) return;
+
+  // 오늘이 장날?
+  if (isMarketDay(now.getDate())) {
+    todayEl.style.display = 'flex';
+    downEl.style.display  = 'none';
+    return;
+  }
+
+  // 다음 장날 찾기
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const check    = new Date(midnight);
+  let found = null;
+  for (let i = 1; i <= 15; i++) {
+    check.setDate(check.getDate() + 1);
+    if (isMarketDay(check.getDate())) {
+      found = { date: new Date(check), diff: i };
+      break;
+    }
+  }
+  if (!found) return;
+
+  todayEl.style.display = 'none';
+  downEl.style.display  = 'flex';
+
+  // D-day 표시
+  const ddayEl = document.getElementById('cntDday');
+  const strEl  = document.getElementById('cntNextStr');
+  if (ddayEl) ddayEl.textContent = `D-${found.diff}`;
+  if (strEl) {
+    const m   = found.date.getMonth() + 1;
+    const d   = found.date.getDate();
+    const dow = DOW[found.date.getDay()];
+    strEl.textContent = `${m}월 ${d}일 (${dow}) 장날`;
+  }
+
+  // 실시간 카운트다운 (다음 장날 자정까지)
+  const remaining = found.date - now;  // ms
+  const totalSec  = Math.max(0, Math.floor(remaining / 1000));
+  const days  = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins  = Math.floor((totalSec % 3600) / 60);
+  const secs  = totalSec % 60;
+
+  const dEl = document.getElementById('cntD');
+  const hEl = document.getElementById('cntH');
+  const mEl = document.getElementById('cntM');
+  const sEl = document.getElementById('cntS');
+  if (dEl) dEl.textContent = String(days);
+  if (hEl) hEl.textContent = pad(hours);
+  if (mEl) mEl.textContent = pad(mins);
+  if (sEl) sEl.textContent = pad(secs);
 }
 
 function initDday() {
-  const mkt = calcNextMarket();
-  if (!mkt) return;
-
-  const banner = document.getElementById('ddayBanner');
-  const numEl  = document.getElementById('ddayNum');
-  const msgEl  = document.getElementById('ddayMsg');
-  const dateEl = document.getElementById('nextDate');
-
-  const m = mkt.date.getMonth() + 1;
-  const d = mkt.date.getDate();
-
-  if (mkt.diff === 0) {
-    banner.classList.add('today');
-    numEl.textContent  = 'D-DAY';
-    msgEl.textContent  = '🎉 오늘 장날입니다! 지금 바로 횡성전통시장으로 오세요';
-  } else {
-    numEl.textContent  = `D-${mkt.diff}`;
-    msgEl.textContent  = `${m}월 ${d}일 장날까지 ${mkt.diff}일 남았습니다`;
-  }
-  dateEl.textContent = `${m}월 ${d}일`;
-
-  // 실시간 시계 1초마다 갱신
-  updateClock();
-  setInterval(updateClock, 1000);
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 }
 
 // ── 캘린더 ────────────────────────────────────
