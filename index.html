@@ -918,6 +918,82 @@ a.tel-link:active {
   .dday-strip-div:last-of-type{display:none}
   .dday-strip-item{padding:12px 16px}
 }
+/* ══ 시네마틱 직후 카운트다운 위젯 ══ */
+.cnt-hero-widget{
+  background:linear-gradient(135deg,#1A0E06 0%,#2A1A0E 50%,#1A0E06 100%);
+  border-top:2px solid rgba(212,146,14,.4);
+  border-bottom:2px solid rgba(212,146,14,.4);
+  position:relative;overflow:hidden;
+}
+.cnt-hw-today{
+  display:none;align-items:center;justify-content:center;gap:24px;
+  padding:36px 40px;position:relative;
+}
+.cnt-hw-pulse{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(212,146,14,.16) 0%,transparent 70%);
+  animation:ctPulse 2.5s ease-in-out infinite;
+}
+.cnt-hw-title{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:800;color:var(--gold);letter-spacing:.05em;
+}
+.cnt-hw-sub{font-size:.9rem;color:rgba(247,237,216,.7);letter-spacing:.1em;margin-top:6px}
+.cnt-hw-down{
+  display:flex;align-items:stretch;justify-content:center;
+}
+.cnt-hw-left,.cnt-hw-right{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 48px;gap:6px;
+}
+.cnt-hw-eyebrow{
+  font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;
+  color:rgba(212,146,14,.5);margin-bottom:4px;
+}
+.cnt-hw-dday{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(2.8rem,6vw,4rem);
+  font-weight:800;color:var(--gold);line-height:1;
+}
+.cnt-hw-date{font-size:.82rem;color:rgba(247,237,216,.5);letter-spacing:.06em;margin-top:4px}
+.cnt-hw-sep{width:1px;background:rgba(212,146,14,.2);margin:20px 0}
+.cnt-hw-timer{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 56px;gap:10px;
+}
+.cnt-hw-digits{display:flex;align-items:flex-end;gap:12px}
+.cnt-hw-unit{text-align:center}
+.cnt-hw-num{
+  display:block;font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(2.4rem,5.5vw,3.6rem);font-weight:800;
+  color:var(--cream);line-height:1;font-variant-numeric:tabular-nums;
+  min-width:2.2ch;
+}
+.cnt-hw-ulab{display:block;font-size:.58rem;letter-spacing:.2em;color:rgba(247,237,216,.35);margin-top:4px}
+.cnt-hw-col{
+  font-family:'Nanum Myeongjo',serif;font-size:2.8rem;
+  color:rgba(212,146,14,.45);line-height:1;padding-bottom:20px;
+}
+.cnt-hw-clock{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(1.8rem,4vw,2.8rem);
+  font-weight:800;color:var(--cream);line-height:1;font-variant-numeric:tabular-nums;
+}
+.cnt-hw-cta{
+  display:inline-block;margin-top:12px;padding:8px 24px;
+  border:1px solid rgba(212,146,14,.45);
+  font-size:.72rem;letter-spacing:.18em;color:var(--gold);
+  text-decoration:none;transition:background .2s;
+}
+.cnt-hw-cta:hover{background:rgba(212,146,14,.12)}
+@media(max-width:768px){
+  .cnt-hw-left{padding:20px 20px}
+  .cnt-hw-timer{padding:20px 20px}
+  .cnt-hw-right{display:none}
+  .cnt-hw-sep:last-of-type{display:none}
+  .cnt-hw-digits{gap:8px}
+  .cnt-hw-num{font-size:clamp(2rem,8vw,3rem)}
+  .cnt-hw-col{font-size:2.2rem;padding-bottom:16px}
+  .cnt-hw-today{padding:24px 16px;flex-direction:column;text-align:center}
+}
 </style>
 </head>
 <body>
@@ -1195,6 +1271,46 @@ a.tel-link:active {
   </div>
 </div>
 <!-- ══ /CINEMATIC ══ -->
+
+<!-- ══ 장날 카운트다운 위젯 (시네마틱 직후) ══ -->
+<div class="cnt-hero-widget">
+  <!-- 당일 모드 -->
+  <div class="cnt-hw-today" id="hwToday" style="display:none">
+    <div class="cnt-hw-pulse"></div>
+    <span style="font-size:2.2rem">🎉</span>
+    <div>
+      <div class="cnt-hw-title">오늘이 장날이에요!</div>
+      <div class="cnt-hw-sub">횡성전통시장 · 오전 7시 — 오후 6시</div>
+    </div>
+  </div>
+  <!-- 카운트다운 모드 -->
+  <div class="cnt-hw-down" id="hwDown">
+    <div class="cnt-hw-left">
+      <div class="cnt-hw-eyebrow">다음 장날까지</div>
+      <div class="cnt-hw-dday" id="hwDday">D-?</div>
+      <div class="cnt-hw-date" id="hwDate">— 월 — 일 장날</div>
+    </div>
+    <div class="cnt-hw-sep"></div>
+    <div class="cnt-hw-timer">
+      <div class="cnt-hw-eyebrow">남은 시간</div>
+      <div class="cnt-hw-digits">
+        <div class="cnt-hw-unit"><span class="cnt-hw-num" id="hwD">0</span><span class="cnt-hw-ulab">일</span></div>
+        <span class="cnt-hw-col">:</span>
+        <div class="cnt-hw-unit"><span class="cnt-hw-num" id="hwH">00</span><span class="cnt-hw-ulab">시간</span></div>
+        <span class="cnt-hw-col">:</span>
+        <div class="cnt-hw-unit"><span class="cnt-hw-num" id="hwM">00</span><span class="cnt-hw-ulab">분</span></div>
+        <span class="cnt-hw-col">:</span>
+        <div class="cnt-hw-unit"><span class="cnt-hw-num" id="hwS">00</span><span class="cnt-hw-ulab">초</span></div>
+      </div>
+    </div>
+    <div class="cnt-hw-sep"></div>
+    <div class="cnt-hw-right">
+      <div class="cnt-hw-eyebrow">지금 시각</div>
+      <div class="cnt-hw-clock" id="hwClock">00:00:00</div>
+      <a href="#calendar" class="cnt-hw-cta">장날 캘린더 →</a>
+    </div>
+  </div>
+</div>
 
 <section class="about fade-in" id="about">
   <div class="fade-in-left">
