@@ -687,6 +687,98 @@ a.tel-link:active {
   .cs-timer-bar{height:2px}
   .cs-cta-link{padding:12px 34px;font-size:.76rem}
 }
+
+/* ══ 장날 카운트다운 위젯 ══ */
+.cnt-wrap{
+  background:linear-gradient(90deg,#0F0803 0%,#1E1208 30%,#1E1208 70%,#0F0803 100%);
+  border-top:1px solid rgba(212,146,14,.25);border-bottom:1px solid rgba(212,146,14,.25);
+  overflow:hidden;position:relative;
+}
+.cnt-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent,transparent 120px,rgba(212,146,14,.03) 120px,rgba(212,146,14,.03) 121px);
+  pointer-events:none;
+}
+/* 장날 당일 */
+.cnt-today{
+  display:none;align-items:center;justify-content:center;gap:20px;
+  padding:28px 40px;position:relative;
+}
+.cnt-today::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(212,146,14,.12) 0%,transparent 70%);
+  animation:ctPulse 2.5s ease-in-out infinite;
+}
+.cnt-today-icon{font-size:2.2rem;position:relative;z-index:1}
+.cnt-today-body{position:relative;z-index:1;text-align:center}
+.cnt-today-title{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(1.4rem,3.5vw,2rem);
+  font-weight:800;color:var(--gold);letter-spacing:.06em;line-height:1.2;
+}
+.cnt-today-sub{font-size:.88rem;color:var(--cream);letter-spacing:.1em;margin-top:6px;opacity:.85}
+.cnt-today-time{
+  display:inline-block;margin-top:8px;padding:5px 20px;
+  border:1px solid rgba(212,146,14,.4);font-size:.75rem;
+  color:rgba(247,237,216,.6);letter-spacing:.12em;
+}
+/* 카운트다운 */
+.cnt-down{
+  display:flex;align-items:stretch;justify-content:center;
+}
+.cnt-cell{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:18px 36px;gap:4px;
+}
+.cnt-cell-label{
+  font-size:.55rem;letter-spacing:.38em;text-transform:uppercase;
+  color:rgba(212,146,14,.5);
+}
+.cnt-dday-num{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(2rem,5vw,3rem);
+  font-weight:800;color:var(--gold);line-height:1;
+}
+.cnt-next-str{
+  font-size:.72rem;color:rgba(247,237,216,.45);letter-spacing:.06em;margin-top:2px;
+}
+.cnt-vdiv{width:1px;background:rgba(212,146,14,.18);margin:14px 0}
+.cnt-timer-row{
+  display:flex;align-items:flex-end;gap:6px;
+}
+.cnt-unit-block{text-align:center}
+.cnt-num{
+  display:block;font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:800;
+  color:var(--cream);line-height:1;font-variant-numeric:tabular-nums;
+  min-width:2ch;
+}
+.cnt-unit{
+  display:block;font-size:.55rem;letter-spacing:.2em;
+  color:rgba(247,237,216,.35);margin-top:3px;
+}
+.cnt-sep{
+  font-family:'Nanum Myeongjo',serif;font-size:2rem;
+  color:rgba(212,146,14,.35);line-height:1;padding-bottom:18px;
+}
+.cnt-clock-num{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(1.5rem,3.5vw,2.2rem);
+  font-weight:800;color:var(--cream);line-height:1;font-variant-numeric:tabular-nums;
+}
+.cnt-date-str{font-size:.68rem;color:rgba(247,237,216,.38);letter-spacing:.06em;margin-top:3px}
+@keyframes ctPulse{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* 모바일 */
+@media(max-width:768px){
+  .cnt-cell{padding:14px 18px}
+  .cnt-timer-row{gap:4px}
+  .cnt-cell:last-child{display:none} /* 시계 셀 숨김 */
+  .cnt-vdiv:last-of-type{display:none}
+  .cnt-num{font-size:clamp(1.6rem,8vw,2.4rem)}
+  .cnt-today{padding:22px 20px;flex-direction:column;gap:12px}
+}
+/* SVG 일러스트 about 프레임 */
+.about-svg-illust{
+  width:100%;height:100%;display:block;
+}
 </style>
 </head>
 <body>
@@ -736,14 +828,50 @@ a.tel-link:active {
   <div class="hero-scroll"><span>SCROLL</span><div class="scroll-line"></div></div>
 </section>
 
-<div id="ddayBanner" class="dday-banner">
-  <div class="dday-item"><span id="ddayNum" class="dday-num">D-?</span><span class="dday-label">MARKET DAY</span></div>
-  <div class="dday-divider"></div>
-  <div class="dday-item"><span id="nextDate" class="dday-num" style="font-size:1.6rem">—</span><span class="dday-label">다음 장날</span></div>
-  <div class="dday-divider"></div>
-  <div id="ddayMsg" class="dday-msg">장날 정보를 불러오는 중...</div>
-  <div class="dday-divider"></div>
-  <div class="dday-item"><span id="liveClock" class="dday-num" style="font-size:1.6rem;font-variant-numeric:tabular-nums">00:00:00</span><span id="liveDate" class="dday-label">날짜 로딩 중</span></div>
+<!-- ══ 장날 카운트다운 위젯 ══ -->
+<div id="ddayBanner" class="cnt-wrap">
+
+  <!-- 장날 당일 -->
+  <div id="cntToday" class="cnt-today">
+    <span class="cnt-today-icon">🎉</span>
+    <div class="cnt-today-body">
+      <div class="cnt-today-title">오늘이 장날이에요!</div>
+      <div class="cnt-today-sub">횡성전통시장에 오신 걸 환영합니다</div>
+      <div class="cnt-today-time">오전 7시 — 오후 6시 운영 중</div>
+    </div>
+  </div>
+
+  <!-- 카운트다운 -->
+  <div id="cntDown" class="cnt-down">
+    <!-- D-day + 날짜 -->
+    <div class="cnt-cell">
+      <span class="cnt-cell-label">다음 장날까지</span>
+      <span class="cnt-dday-num" id="cntDday">D-?</span>
+      <span class="cnt-next-str" id="cntNextStr">— 월 — 일 장날</span>
+    </div>
+    <div class="cnt-vdiv"></div>
+    <!-- 실시간 타이머 -->
+    <div class="cnt-cell">
+      <span class="cnt-cell-label">남은 시간</span>
+      <div class="cnt-timer-row">
+        <div class="cnt-unit-block"><span class="cnt-num" id="cntD">0</span><span class="cnt-unit">일</span></div>
+        <span class="cnt-sep">:</span>
+        <div class="cnt-unit-block"><span class="cnt-num" id="cntH">00</span><span class="cnt-unit">시간</span></div>
+        <span class="cnt-sep">:</span>
+        <div class="cnt-unit-block"><span class="cnt-num" id="cntM">00</span><span class="cnt-unit">분</span></div>
+        <span class="cnt-sep">:</span>
+        <div class="cnt-unit-block"><span class="cnt-num" id="cntS">00</span><span class="cnt-unit">초</span></div>
+      </div>
+    </div>
+    <div class="cnt-vdiv"></div>
+    <!-- 현재 시각 -->
+    <div class="cnt-cell">
+      <span class="cnt-cell-label">지금 시각</span>
+      <span class="cnt-clock-num" id="liveClock" style="font-variant-numeric:tabular-nums">00:00:00</span>
+      <span class="cnt-date-str" id="liveDate">날짜 로딩 중</span>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══ CINEMATIC INTRO BANNER ══ -->
@@ -960,10 +1088,242 @@ a.tel-link:active {
 <section class="about fade-in" id="about">
   <div class="fade-in-left">
     <div class="about-frame">
-      <div class="about-frame-inner">
-        <div class="about-icon">🏛️</div>
-        <div class="about-frame-text">횡성전통시장<br><span style="font-size:.85rem;opacity:.6">우하하 횡성한우시장</span></div>
-      </div>
+      <!-- 전통시장 감성 SVG 일러스트 -->
+      <svg class="about-svg-illust" viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="aiBg" cx="50%" cy="40%" r="65%">
+            <stop offset="0%" stop-color="#EDE0C4"/>
+            <stop offset="100%" stop-color="#C8A870"/>
+          </radialGradient>
+          <radialGradient id="aiLantern1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#D4920E" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#D4920E" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="aiLantern2" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#D4920E" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#D4920E" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="aiGlow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+
+        <!-- 배경 -->
+        <rect width="480" height="480" fill="url(#aiBg)"/>
+        <!-- 배경 질감 라인들 -->
+        <line x1="0" y1="60" x2="480" y2="60" stroke="#B8751A" stroke-width="0.4" opacity="0.18"/>
+        <line x1="0" y1="120" x2="480" y2="120" stroke="#B8751A" stroke-width="0.3" opacity="0.12"/>
+        <!-- 대각선 질감 -->
+        <line x1="0" y1="0" x2="480" y2="480" stroke="#B8751A" stroke-width="0.3" opacity="0.06"/>
+        <line x1="480" y1="0" x2="0" y2="480" stroke="#B8751A" stroke-width="0.3" opacity="0.06"/>
+
+        <!-- ── 상단 현수막 배너 ── -->
+        <rect x="50" y="32" width="380" height="52" rx="3" fill="#1E1208" opacity="0.9"/>
+        <rect x="54" y="36" width="372" height="44" rx="2" stroke="#D4920E" stroke-width="1.2" fill="none" opacity="0.7"/>
+        <!-- 배너 밧줄 -->
+        <line x1="100" y1="32" x2="84" y2="14" stroke="#6B3A1A" stroke-width="2"/>
+        <line x1="380" y1="32" x2="396" y2="14" stroke="#6B3A1A" stroke-width="2"/>
+        <!-- 배너 텍스트 -->
+        <text x="240" y="64" text-anchor="middle" dominant-baseline="middle"
+          font-family="'Nanum Myeongjo',serif" font-size="20" font-weight="800"
+          fill="#D4920E" letter-spacing="5">횡성전통시장</text>
+
+        <!-- ── 바닥 ── -->
+        <rect x="0" y="390" width="480" height="90" fill="#B8751A" opacity="0.18"/>
+        <line x1="0" y1="390" x2="480" y2="390" stroke="#6B3A1A" stroke-width="1.5" opacity="0.4"/>
+
+        <!-- ════ 점포 1 (왼쪽) ════ -->
+        <!-- 천막 지붕 -->
+        <polygon points="25,308 110,218 195,308" fill="#B8751A"/>
+        <polygon points="55,308 110,242 165,308" fill="#D4920E" opacity="0.45"/>
+        <!-- 천막 테두리 -->
+        <polyline points="25,308 110,218 195,308" stroke="#6B3A1A" stroke-width="2" fill="none"/>
+        <!-- 천막 술(fringe) -->
+        <line x1="30"  y1="308" x2="30"  y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="50"  y1="308" x2="50"  y2="321" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="70"  y1="308" x2="70"  y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="90"  y1="308" x2="90"  y2="322" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="110" y1="308" x2="110" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="130" y1="308" x2="130" y2="321" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="150" y1="308" x2="150" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="170" y1="308" x2="170" y2="322" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="190" y1="308" x2="190" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <!-- 뒷벽 -->
+        <rect x="25" y="308" width="170" height="82" fill="#2A1A0E" opacity="0.88"/>
+        <!-- 기둥 -->
+        <rect x="22"  y="302" width="7" height="93" rx="3" fill="#4A2A10"/>
+        <rect x="191" y="302" width="7" height="93" rx="3" fill="#4A2A10"/>
+        <rect x="107" y="213" width="7" height="182" rx="3" fill="#4A2A10"/>
+        <!-- 계산대 -->
+        <rect x="15" y="356" width="190" height="14" rx="3" fill="#D4920E" opacity="0.9"/>
+        <!-- 진열품 (채소·식료품) -->
+        <circle cx="48"  cy="349" r="11" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="70"  cy="347" r="13" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="93"  cy="350" r="10" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="115" cy="348" r="12" fill="#B8751A" opacity="0.75"/>
+        <circle cx="138" cy="350" r="10" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="158" cy="348" r="11" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="178" cy="350" r="9"  fill="#8B4A1A" opacity="0.8"/>
+        <!-- 천장에 매달린 것 (더덕, 마른 것들) -->
+        <line x1="50"  y1="308" x2="50"  y2="340" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="50" cy="348" rx="9" ry="14" fill="#6B3A0E" opacity="0.75"/>
+        <line x1="80"  y1="308" x2="80"  y2="338" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="80" cy="346" rx="7" ry="11" fill="#8B4A1A" opacity="0.75"/>
+        <line x1="150" y1="308" x2="150" y2="340" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="150" cy="348" rx="9" ry="14" fill="#6B3A0E" opacity="0.75"/>
+        <!-- 상인 실루엣 -->
+        <ellipse cx="108" cy="326" rx="18" ry="18" fill="#1E1208" opacity="0.75"/>
+        <rect    x="89"  y="344" width="38" height="38" rx="6" fill="#1E1208" opacity="0.7"/>
+        <!-- 김 (steam) -->
+        <ellipse cx="78" cy="298" rx="7" ry="4" fill="#D4920E" opacity="0.18"/>
+        <ellipse cx="86" cy="285" rx="5" ry="3" fill="#D4920E" opacity="0.12"/>
+        <ellipse cx="80" cy="273" rx="4" ry="3" fill="#D4920E" opacity="0.08"/>
+
+        <!-- ════ 점포 2 (중앙, 가장 큼) ════ -->
+        <polygon points="160,305 280,200 400,305" fill="#B8751A"/>
+        <polygon points="195,305 280,225 365,305" fill="#D4920E" opacity="0.4"/>
+        <polyline points="160,305 280,200 400,305" stroke="#6B3A1A" stroke-width="2" fill="none"/>
+        <!-- 술 -->
+        <line x1="165" y1="305" x2="165" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="185" y1="305" x2="185" y2="319" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="205" y1="305" x2="205" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="225" y1="305" x2="225" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="245" y1="305" x2="245" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="265" y1="305" x2="265" y2="319" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="280" y1="305" x2="280" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="295" y1="305" x2="295" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="315" y1="305" x2="315" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="335" y1="305" x2="335" y2="319" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="355" y1="305" x2="355" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="375" y1="305" x2="375" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="395" y1="305" x2="395" y2="318" stroke="#6B3A1A" stroke-width="1.5"/>
+        <!-- 뒷벽 -->
+        <rect x="160" y="305" width="240" height="85" fill="#2A1A0E" opacity="0.9"/>
+        <!-- 기둥 -->
+        <rect x="157" y="299" width="7" height="96" rx="3" fill="#4A2A10"/>
+        <rect x="393" y="299" width="7" height="96" rx="3" fill="#4A2A10"/>
+        <rect x="277" y="195" width="7" height="200" rx="3" fill="#4A2A10"/>
+        <!-- 계산대 -->
+        <rect x="150" y="355" width="258" height="14" rx="3" fill="#D4920E" opacity="0.9"/>
+        <!-- 진열품 -->
+        <circle cx="178" cy="347" r="12" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="202" cy="345" r="14" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="228" cy="348" r="11" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="252" cy="346" r="13" fill="#B8751A" opacity="0.75"/>
+        <circle cx="278" cy="348" r="11" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="303" cy="346" r="13" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="328" cy="348" r="11" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="353" cy="346" r="12" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="376" cy="348" r="10" fill="#B8751A" opacity="0.75"/>
+        <!-- 매달린 것들 -->
+        <line x1="185" y1="305" x2="185" y2="338" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="185" cy="347" rx="9" ry="13" fill="#6B3A0E" opacity="0.7"/>
+        <line x1="215" y1="305" x2="215" y2="336" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="215" cy="344" rx="7" ry="11" fill="#8B4A1A" opacity="0.7"/>
+        <line x1="345" y1="305" x2="345" y2="338" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="345" cy="347" rx="9" ry="13" fill="#6B3A0E" opacity="0.7"/>
+        <line x1="375" y1="305" x2="375" y2="336" stroke="#4A2A10" stroke-width="1.5"/>
+        <ellipse cx="375" cy="344" rx="7" ry="11" fill="#8B4A1A" opacity="0.7"/>
+        <!-- 상인 실루엣 -->
+        <ellipse cx="240" cy="322" rx="19" ry="19" fill="#1E1208" opacity="0.75"/>
+        <rect    x="220" y="341" width="40" height="38" rx="6" fill="#1E1208" opacity="0.7"/>
+        <ellipse cx="320" cy="324" rx="17" ry="17" fill="#1E1208" opacity="0.70"/>
+        <rect    x="302" y="341" width="36" height="34" rx="5" fill="#1E1208" opacity="0.65"/>
+
+        <!-- ════ 점포 3 (오른쪽) ════ -->
+        <polygon points="285,308 370,218 455,308" fill="#B8751A"/>
+        <polygon points="315,308 370,242 425,308" fill="#D4920E" opacity="0.45"/>
+        <polyline points="285,308 370,218 455,308" stroke="#6B3A1A" stroke-width="2" fill="none"/>
+        <!-- 술 -->
+        <line x1="290" y1="308" x2="290" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="310" y1="308" x2="310" y2="321" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="330" y1="308" x2="330" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="350" y1="308" x2="350" y2="322" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="370" y1="308" x2="370" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="390" y1="308" x2="390" y2="321" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="410" y1="308" x2="410" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="430" y1="308" x2="430" y2="322" stroke="#6B3A1A" stroke-width="1.5"/>
+        <line x1="450" y1="308" x2="450" y2="320" stroke="#6B3A1A" stroke-width="1.5"/>
+        <!-- 뒷벽 -->
+        <rect x="285" y="308" width="170" height="82" fill="#2A1A0E" opacity="0.88"/>
+        <!-- 기둥 -->
+        <rect x="282" y="302" width="7" height="93" rx="3" fill="#4A2A10"/>
+        <rect x="451" y="302" width="7" height="93" rx="3" fill="#4A2A10"/>
+        <rect x="367" y="213" width="7" height="182" rx="3" fill="#4A2A10"/>
+        <!-- 계산대 -->
+        <rect x="275" y="356" width="190" height="14" rx="3" fill="#D4920E" opacity="0.9"/>
+        <!-- 진열품 -->
+        <circle cx="302" cy="348" r="11" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="322" cy="346" r="13" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="345" cy="349" r="10" fill="#B8751A" opacity="0.75"/>
+        <circle cx="367" cy="347" r="12" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="390" cy="349" r="10" fill="#8B4A1A" opacity="0.8"/>
+        <circle cx="412" cy="347" r="11" fill="#6B3A0E" opacity="0.85"/>
+        <circle cx="432" cy="349" r="9"  fill="#B8751A" opacity="0.75"/>
+        <!-- 상인 실루엣 -->
+        <ellipse cx="370" cy="326" rx="18" ry="18" fill="#1E1208" opacity="0.75"/>
+        <rect    x="351" y="344" width="38" height="38" rx="6" fill="#1E1208" opacity="0.7"/>
+
+        <!-- ════ 등롱 줄 ════ -->
+        <!-- 줄1: 점포1 중심기둥 → 점포2 왼쪽 기둥 -->
+        <path d="M 111,240 Q 160,258 161,300" stroke="#4A2A10" stroke-width="1.5" fill="none"/>
+        <!-- 줄2: 점포2 중심 → 점포3 왼쪽 기둥 -->
+        <path d="M 284,240 Q 284,258 286,300" stroke="#4A2A10" stroke-width="1.5" fill="none"/>
+
+        <!-- 등롱 1 -->
+        <circle cx="111" cy="255" r="20" fill="url(#aiLantern1)"/>
+        <ellipse cx="111" cy="254" rx="9"  ry="13" fill="#D4920E" opacity="0.92"/>
+        <ellipse cx="111" cy="254" rx="6"  ry="9"  fill="#F7EDD8" opacity="0.55"/>
+        <line x1="111" y1="241" x2="111" y2="237" stroke="#4A2A10" stroke-width="1.5"/>
+        <line x1="111" y1="267" x2="111" y2="272" stroke="#4A2A10" stroke-width="1.5"/>
+        <!-- 등롱 2 -->
+        <circle cx="199" cy="255" r="18" fill="url(#aiLantern2)"/>
+        <ellipse cx="199" cy="254" rx="8"  ry="12" fill="#D4920E" opacity="0.88"/>
+        <ellipse cx="199" cy="254" rx="5"  ry="8"  fill="#F7EDD8" opacity="0.5"/>
+        <line x1="199" y1="242" x2="199" y2="238" stroke="#4A2A10" stroke-width="1.5"/>
+        <line x1="199" y1="266" x2="199" y2="271" stroke="#4A2A10" stroke-width="1.5"/>
+        <!-- 등롱 3 -->
+        <circle cx="370" cy="255" r="20" fill="url(#aiLantern1)"/>
+        <ellipse cx="370" cy="254" rx="9"  ry="13" fill="#D4920E" opacity="0.92"/>
+        <ellipse cx="370" cy="254" rx="6"  ry="9"  fill="#F7EDD8" opacity="0.55"/>
+        <line x1="370" y1="241" x2="370" y2="237" stroke="#4A2A10" stroke-width="1.5"/>
+        <line x1="370" y1="267" x2="370" y2="272" stroke="#4A2A10" stroke-width="1.5"/>
+
+        <!-- ════ 손님 실루엣 ════ -->
+        <!-- 손님 1 -->
+        <ellipse cx="68"  cy="383" rx="15" ry="15" fill="#1E1208" opacity="0.6"/>
+        <rect    x="52"   y="398" width="32" height="42" rx="5" fill="#1E1208" opacity="0.55"/>
+        <rect    x="55"   y="440" width="10" height="22" rx="3" fill="#2A1A0E" opacity="0.5"/>
+        <rect    x="73"   y="440" width="10" height="24" rx="3" fill="#2A1A0E" opacity="0.5"/>
+        <!-- 손님 2 (장바구니 든) -->
+        <ellipse cx="200" cy="379" rx="16" ry="16" fill="#1E1208" opacity="0.6"/>
+        <rect    x="183"  y="395" width="34" height="44" rx="5" fill="#1E1208" opacity="0.55"/>
+        <rect    x="218"  y="405" width="24" height="18" rx="3" fill="#B8751A" opacity="0.55"/>
+        <rect    x="187"  y="439" width="11" height="22" rx="3" fill="#2A1A0E" opacity="0.5"/>
+        <rect    x="208"  y="439" width="11" height="24" rx="3" fill="#2A1A0E" opacity="0.5"/>
+        <!-- 손님 3 (어린이) -->
+        <ellipse cx="310" cy="388" rx="12" ry="12" fill="#1E1208" opacity="0.55"/>
+        <rect    x="297"  y="400" width="26" height="36" rx="4" fill="#1E1208" opacity="0.5"/>
+        <rect    x="300"  y="436" width="8"  height="20" rx="3" fill="#2A1A0E" opacity="0.45"/>
+        <rect    x="315"  y="436" width="8"  height="18" rx="3" fill="#2A1A0E" opacity="0.45"/>
+        <!-- 손님 4 (어르신) -->
+        <ellipse cx="420" cy="382" rx="14" ry="14" fill="#1E1208" opacity="0.6"/>
+        <rect    x="405"  y="396" width="30" height="42" rx="5" fill="#1E1208" opacity="0.55" transform="rotate(3,420,417)"/>
+        <!-- 지팡이 -->
+        <rect    x="436"  y="418" width="4"  height="48" rx="2" fill="#4A2A10" opacity="0.55"/>
+        <rect    x="409"  y="438" width="10" height="22" rx="3" fill="#2A1A0E" opacity="0.5"/>
+        <rect    x="426"  y="438" width="10" height="20" rx="3" fill="#2A1A0E" opacity="0.5"/>
+
+        <!-- ── 하단 데코 텍스트 ── -->
+        <text x="240" y="472" text-anchor="middle"
+          font-family="'Nanum Myeongjo',serif" font-size="11" fill="#6B3A1A"
+          opacity="0.5" letter-spacing="4">매월 1·6일 장날 · 우하하 횡성한우시장</text>
+
+        <!-- 테두리 장식 -->
+        <rect x="8" y="8" width="464" height="464" fill="none" stroke="#B8751A" stroke-width="1.5" opacity="0.35"/>
+        <rect x="14" y="14" width="452" height="452" fill="none" stroke="#B8751A" stroke-width="0.5" opacity="0.2"/>
+      </svg>
     </div>
   </div>
   <div class="fade-in-right">
