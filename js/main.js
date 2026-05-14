@@ -301,7 +301,7 @@ function initTilt() {
 // ── 네비 스크롤 하이라이트 ────────────────────
 function initNavHighlight() {
   const sections = document.querySelectorAll('section[id], div[id]');
-  const navLinks = document.querySelectorAll('.nav-links a');
+  const navLinks = document.querySelectorAll('.nav-links a, .nav-mobile-overlay a');
   window.addEventListener('scroll', () => {
     let current = '';
     sections.forEach(s => {
